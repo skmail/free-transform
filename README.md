@@ -15,6 +15,24 @@ A set of functions to calculate boundries element resizing, translating, rotatin
 
 ### Scale
 
+#### scale types (Handles)
+`tl` Top Left Handle
+
+`ml` Middle Left Handle
+
+`tr` Top Right Handle
+
+`tm` Top Middle Handle
+
+`bl` Bottom Left Handle
+
+`bm` Bottom Middle Handle
+
+`br` Bottom Right Handle
+
+`mr` Middle Right Handle
+
+
 ```js
 import {scale} from 'free-transform'
 
@@ -28,23 +46,20 @@ let element = {
   angle:0,
   scaleLimit:0.1, 
 }
-const onMouseDown = (event) => {
+
+const onScaleHandleMouseDown = (event) => {
   
   event.stopPropagation();
   event.preventDefault();
-      
-  const drag = scale(scaleType, {
+  const drag = scale('tl', {
     startX: event.pageX,
     startY: event.pageY,
     scaleFromCenter: event.altKey,
     aspectRatio: event.shiftKey,
     ...element,   
-  }, ({x, y, scaleX, scaleY}) => {
+  }, (payload) => { // {x, y, scaleX, scaleY}
     // dragging
-    element = {
-      ...element,
-      x,y,scaleX,scaleY
-    }
+    element = { ...element, ...payload }
   });
   
   const up = () => {
@@ -57,9 +72,88 @@ const onMouseDown = (event) => {
   
 }
 
+```
+### Rotation
+
+
+
+```js
+
+import {rotate} from 'free-transform'
+
+let element = {
+  x:0,
+  y:0,
+  scaleX:1,
+  scaleY:1,
+  width:100,
+  height:100,
+  angle:0,
+  scaleLimit:0.1, 
+}
+
+const onRotateHandleMouseDown = (event) => {
+  
+  event.stopPropagation();
+  event.preventDefault();
+      
+  const drag = rotate({
+    startX: event.pageX,
+    startY: event.pageY, 
+    offsetX: 0, // the offset x of parent (parent.offsetLeft)
+    offsetY: 0, // the offset y of parent (parent.offsetTop)
+    ...element,   
+  }, (payload) => { // {angle}
+    // dragging
+    element = { ...element, ...payload }
+  });
+  
+  const up = () => {
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', up);
+  };
+
+  document.addEventListener("mousemove", drag)
+  document.addEventListener("mouseup", up)
+}
 
 ```
 
 
- 
- 
+### Translation (Dragging)
+
+```js
+let element = {
+  x:0,
+  y:0,
+  scaleX:1,
+  scaleY:1,
+  width:100,
+  height:100,
+  angle:0,
+  scaleLimit:0.1, 
+}
+
+const onElementMouseDown = (event) => {
+    event.stopPropagation();
+    
+    const drag = translate({
+      x: element.x,
+      y: element.y,
+      startX: event.pageX,
+      startY: event.pageY
+    }, (payload) => { // {x,y}
+      // dragging     
+      element = { ...element, ...payload }
+    });
+    
+    const up = () => {
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', up);
+    };
+    
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', up);
+}
+
+```
