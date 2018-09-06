@@ -1,0 +1,31 @@
+{
+  "name": "free-transform",
+  "version": "0.1.0",
+  "description": "Free transform tool utlity",
+  "main": "./lib/index.js",
+  "author": "Solaiman Kmail <psokmail@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:lib": "babel src --out-dir lib  --watch  --ignore __tests__ ",
+    "test": "jest --verbose",
+    "test:watch": "npm run test --runInBand --colors --env=jsdom",
+    "test:cov": "npm run test -- --coverage ",
+    "lint": "eslint src",
+    "coverage": "codecov"
+  },
+  "dependencies": {
+    "transformation-matrix": "^1.14.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "codecov": "^3.0.4",
+    "enzyme": "^3.5.0",
+    "eslint": "^5.3.0",
+    "eslint-plugin-import": "^2.13.0",
+    "jest": "^23.4.2"
+  }
+}
