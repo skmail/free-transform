@@ -2,8 +2,7 @@
   "parser": "babel-eslint",
   "extends": [
     "eslint:recommended",
-    "plugin:import/recommended",
-    "plugin:react/recommended"
+    "plugin:import/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
@@ -20,15 +19,10 @@
   },
   "rules": {
     "valid-jsdoc": 2,
-    "react/jsx-uses-react": 1,
-    "react/jsx-no-undef": 2,
-    "react/jsx-wrap-multilines": 2,
-    "react/no-string-refs": 0,
     "indent": ["error", 2]
 
   },
   "plugins": [
-    "import",
-    "react"
+    "import"
   ]
 }
