@@ -1,6 +1,6 @@
 {
   "name": "free-transform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Free transform tool utlity",
   "main": "./lib/index.js",
   "author": "Solaiman Kmail <psokmail@gmail.com>",
