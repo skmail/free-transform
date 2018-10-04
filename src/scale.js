@@ -39,7 +39,9 @@ export default (scaleType, {
   angle,
   scaleLimit,
   scaleFromCenter = false,
-  aspectRatio = false
+  enableScaleFromCenter = true,
+  aspectRatio = false,
+  enableAspectRatio = true
 }, onUpdate) => {
 
   const ratio = (width * scaleX) / (height * scaleY)
@@ -65,7 +67,7 @@ export default (scaleType, {
 
   return (event) => {
 
-    if((event.altKey && !scaleFromCenter) || (!event.altKey && scaleFromCenter)){
+    if(enableScaleFromCenter && ((event.altKey && !scaleFromCenter) || (!event.altKey && scaleFromCenter))){
 
       startX = event.pageX
       startY = event.pageY
@@ -94,6 +96,9 @@ export default (scaleType, {
       aspectRatio = true
     }
 
+    if(!enableAspectRatio){
+      aspectRatio = false
+    }
     const moveDiff = {
       x: event.pageX - startX,
       y: event.pageY - startY
@@ -101,7 +106,7 @@ export default (scaleType, {
 
     const movePoint = getMovePoint(scaleType, oppositePoint, point, moveDiff)
 
-    if (scaleFromCenter) {
+    if (enableScaleFromCenter && scaleFromCenter) {
       movePoint.x *= 2
       movePoint.y *= 2
     }
@@ -138,7 +143,7 @@ export default (scaleType, {
       }
     }
 
-    if (scaleFromCenter) {
+    if (enableScaleFromCenter && scaleFromCenter) {
       const center = getCenter({
         x,
         y,

@@ -6,7 +6,8 @@
   "author": "Solaiman Kmail <psokmail@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build:lib": "babel src --out-dir lib  --watch  --ignore __tests__ ",
+    "build:lib": "babel src --out-dir lib   --ignore __tests__ ",
+    "lib:watch": "babel src --out-dir lib  --watch  --ignore __tests__ ",
     "test": "jest --verbose",
     "test:watch": "npm run test --runInBand --colors --env=jsdom",
     "test:cov": "npm run test -- --coverage ",
