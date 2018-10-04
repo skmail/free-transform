@@ -10,3 +10,4 @@ src
 package.json
 package-lock.json
 yarn-error.log
+.idea
