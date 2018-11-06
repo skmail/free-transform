@@ -12,8 +12,10 @@ const roundPayload = ({x, y, scaleX, scaleY}) => {
 
 it('scale tl', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -22,7 +24,6 @@ it('scale tl', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('tl', state, (payload) => {
@@ -42,8 +43,11 @@ it('scale tl', () => {
 
 it('scale tl from center', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        altKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -52,7 +56,6 @@ it('scale tl from center', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: true
   };
 
   scale('tl', state, (payload) => {
@@ -73,8 +76,10 @@ it('scale tl from center', () => {
 // point position will be reset
 it('scale tl, activate from center while resizing', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -83,7 +88,6 @@ it('scale tl, activate from center while resizing', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('tl', state, (payload) => {
@@ -106,8 +110,11 @@ it('scale tl, activate from center while resizing', () => {
 
 it('scale tl with release shift while resizing', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        altKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -116,7 +123,6 @@ it('scale tl with release shift while resizing', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: true
   };
   scale('tl', state, (payload) => {
     expect(roundPayload(payload)).toEqual({
@@ -134,8 +140,11 @@ it('scale tl with release shift while resizing', () => {
 
 it('scale tl from with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -144,8 +153,6 @@ it('scale tl from with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false,
-    aspectRatio: true
   };
 
   scale('tl', state, (payload) => {
@@ -167,8 +174,10 @@ it('scale tl from with aspect ratio', () => {
 
 it('scale tl  with disable aspect ratio while resizing', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -177,8 +186,6 @@ it('scale tl  with disable aspect ratio while resizing', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false,
-    aspectRatio: true
   };
 
   scale('tl', state, (payload) => {
@@ -199,8 +206,11 @@ it('scale tl  with disable aspect ratio while resizing', () => {
 
 it('scale tl from with enable aspect ratio on resizing', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: false
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -209,8 +219,6 @@ it('scale tl from with enable aspect ratio on resizing', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false,
-    aspectRatio: false
   };
 
   scale('tl', state, (payload) => {
@@ -231,8 +239,12 @@ it('scale tl from with enable aspect ratio on resizing', () => {
 
 it('scale tl from center with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        altKey: true,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -241,8 +253,6 @@ it('scale tl from center with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: true,
-    aspectRatio: true
   };
 
   scale('tl', state, (payload) => {
@@ -262,8 +272,10 @@ it('scale tl from center with aspect ratio', () => {
 
 it('scale bl', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -272,7 +284,6 @@ it('scale bl', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('bl', state, (payload) => {
@@ -290,8 +301,10 @@ it('scale bl', () => {
 
 it('scale ml', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -300,7 +313,6 @@ it('scale ml', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('ml', state, (payload) => {
@@ -318,8 +330,11 @@ it('scale ml', () => {
 
 it('scale ml with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -328,7 +343,6 @@ it('scale ml with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    aspectRatio: true
   };
 
   scale('ml', state, (payload) => {
@@ -348,8 +362,10 @@ it('scale ml with aspect ratio', () => {
 
 it('scale tr', () => {
   const state = {
-    startX: 100,
-    startY: 100,
+    event: {
+        pageX: 100,
+        pageY: 100,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -358,7 +374,6 @@ it('scale tr', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('tr', state, (payload) => {
@@ -377,8 +392,10 @@ it('scale tr', () => {
 
 it('scale tm', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -387,7 +404,6 @@ it('scale tm', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('tm', state, (payload) => {
@@ -406,8 +422,11 @@ it('scale tm', () => {
 
 it('scale tm with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -416,7 +435,6 @@ it('scale tm with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    aspectRatio: true
   };
 
   scale('tm', state, (payload) => {
@@ -436,8 +454,10 @@ it('scale tm with aspect ratio', () => {
 
 it('scale bm', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -446,7 +466,6 @@ it('scale bm', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('bm', state, (payload) => {
@@ -465,8 +484,11 @@ it('scale bm', () => {
 
 it('scale bm with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -475,7 +497,6 @@ it('scale bm with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    aspectRatio: true
   };
 
   scale('bm', state, (payload) => {
@@ -495,8 +516,10 @@ it('scale bm with aspect ratio', () => {
 
 it('scale br', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -505,7 +528,6 @@ it('scale br', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('br', state, (payload) => {
@@ -523,8 +545,10 @@ it('scale br', () => {
 
 it('scale mr', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -533,7 +557,6 @@ it('scale mr', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    scaleFromCenter: false
   };
 
   scale('mr', state, (payload) => {
@@ -553,8 +576,11 @@ it('scale mr', () => {
 
 it('scale mr with aspect ratio', () => {
   const state = {
-    startX: 0,
-    startY: 0,
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
     x: 0,
     y: 0,
     scaleX: 1,
@@ -563,7 +589,6 @@ it('scale mr with aspect ratio', () => {
     height: 100,
     angle: 45,
     scaleLimit: 0.1,
-    aspectRatio: true
   };
 
   scale('mr', state, (payload) => {
@@ -580,3 +605,62 @@ it('scale mr with aspect ratio', () => {
   })
 })
 
+it('test set aspect ratio', () => {
+  const state = {
+    event: {
+        pageX: 0,
+        pageY: 0,
+        shiftKey: true
+    },
+    x: 0,
+    y: 0,
+    scaleX: 1,
+    scaleY: 1,
+    width: 100,
+    height: 100,
+    angle: 45,
+    scaleLimit: 0.1,
+    aspectRatio: 2,
+  };
+
+  scale('tl', state, (payload) => {
+    expect(roundPayload(payload)).toEqual({
+      scaleX: "1.14",
+      scaleY: "0.57",
+      x: "-13.11",
+      y: "-11.29",
+    })
+  })({
+    pageX: -10,
+    pageY: -10
+  })
+
+})
+
+it('test with old arguments (no event}', () => {
+  const state = {
+    startX: 0,
+    startY: 0,
+    x: 0,
+    y: 0,
+    scaleX: 1,
+    scaleY: 1,
+    width: 100,
+    height: 100,
+    angle: 45,
+    scaleLimit: 0.1,
+  };
+
+  scale('tl', state, (payload) => {
+    expect(roundPayload(payload)).toEqual({
+      scaleX: "1.14",
+      scaleY: "1.00",
+      x: "2.07",
+      y: "-5.00",
+    })
+  })({
+    pageX: -10,
+    pageY: -10
+  })
+
+})
