@@ -11,7 +11,7 @@ import {
   getCenter,
   getMovePoint,
   getSineCosine,
-  getOppositePoint,
+  getOppositePoint, minMax,
 } from '../src/point-finder'
 
 const roundPoint = ({x, y}) => {
@@ -890,5 +890,24 @@ it('move point for bl', function () {
   )).toEqual({
     x: -5,
     y: 5,
+  })
+})
+
+it('it find the min and max position', function () {
+  const props = {
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+    scaleX: 1,
+    scaleY: 1,
+    angle: 0
+  }
+
+  expect(minMax(props)).toEqual({
+    xmax: 100,
+    ymax: 100,
+    xmin: 0,
+    ymin: 0,
   })
 })

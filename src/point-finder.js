@@ -57,7 +57,16 @@ export const getCenter = ({x, y, scaleX, scaleY, width, height}) => {
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getTL = ({x, y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getTL = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
     x,
     y,
@@ -81,7 +90,16 @@ export const getTL = ({x, y, scaleX, scaleY, width, height, angle, center = getC
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getBL = ({x, y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => {
+export const getBL = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => {
 
   return findPoint({
     angle,
@@ -107,7 +125,16 @@ export const getBL = ({x, y, scaleX, scaleY, width, height, angle, center = getC
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getTR = ({x, y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getTR = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
     angle,
     center,
@@ -132,7 +159,16 @@ export const getTR = ({x, y, scaleX, scaleY, width, height, angle, center = getC
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getBR = ({x,y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => {
+export const getBR = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => {
   return findPoint({
     angle,
     center,
@@ -156,7 +192,16 @@ export const getBR = ({x,y, scaleX, scaleY, width, height, angle, center = getCe
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getMR = ({x,y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getMR = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
     x: x + (width * scaleX),
     y: y + (height * scaleY) / 2,
@@ -180,7 +225,16 @@ export const getMR = ({x,y, scaleX, scaleY, width, height, angle, center = getCe
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getBM = ({x,y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getBM = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
     x: x + (width * scaleX) / 2,
     y: y + (height * scaleY),
@@ -204,7 +258,16 @@ export const getBM = ({x,y, scaleX, scaleY, width, height, angle, center = getCe
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getTM = ({x,y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getTM = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
     x: x + (width * scaleX) / 2,
     y: y,
@@ -228,9 +291,18 @@ export const getTM = ({x,y, scaleX, scaleY, width, height, angle, center = getCe
  *
  * @returns {{x: number, y: number}} the position
  */
-export const getML = ({x,y, scaleX, scaleY, width, height, angle, center = getCenter({x, y, scaleX, scaleY, width, height})}) => (
+export const getML = ({
+                        x, y, scaleX, scaleY, width, height, angle, center = getCenter({
+    x,
+    y,
+    scaleX,
+    scaleY,
+    width,
+    height
+  })
+                      }) => (
   findPoint({
-    x: x ,
+    x: x,
     y: y + (height * scaleY) / 2,
     center,
     angle
@@ -274,37 +346,37 @@ export const getOppositePoint = (scaleType, props) => {
   }
 
   switch (scaleType) {
-  case 'tl':
-    caller = getBR
-    break
+    case 'tl':
+      caller = getBR
+      break
 
-  case 'ml':
-    caller = getMR
-    break
+    case 'ml':
+      caller = getMR
+      break
 
-  case 'tr' :
-    caller = getBL
-    break
+    case 'tr' :
+      caller = getBL
+      break
 
-  case 'tm' :
-    caller = getBM
-    break
+    case 'tm' :
+      caller = getBM
+      break
 
-  case 'bl' :
-    caller = getTR
-    break
+    case 'bl' :
+      caller = getTR
+      break
 
-  case 'bm' :
-    caller = getTM
-    break
+    case 'bm' :
+      caller = getTM
+      break
 
-  case 'br' :
-    caller = getTL
-    break
+    case 'br' :
+      caller = getTL
+      break
 
-  case 'mr' :
-    caller = getML
-    break
+    case 'mr' :
+      caller = getML
+      break
   }
   return caller(props)
 }
@@ -337,7 +409,7 @@ export const getPoint = (scaleType, props) => {
     scaleY: props.scaleY,
   })
 
-  if(props.scaleFromCenter){
+  if (props.scaleFromCenter) {
     return center;
   }
 
@@ -351,37 +423,37 @@ export const getPoint = (scaleType, props) => {
   let caller
   switch (scaleType) {
 
-  case 'tl':
-    caller = getTL
-    break;
+    case 'tl':
+      caller = getTL
+      break;
 
-  case 'ml':
-    caller = getML
-    break;
+    case 'ml':
+      caller = getML
+      break;
 
-  case 'tr':
-    caller = getTR
-    break;
+    case 'tr':
+      caller = getTR
+      break;
 
-  case 'tm':
-    caller = getTM
-    break;
+    case 'tm':
+      caller = getTM
+      break;
 
-  case 'bl' :
-    caller = getBL
-    break;
+    case 'bl' :
+      caller = getBL
+      break;
 
-  case 'bm' :
-    caller = getBM
-    break;
+    case 'bm' :
+      caller = getBM
+      break;
 
-  case 'br' :
-    caller = getBR
-    break;
+    case 'br' :
+      caller = getBR
+      break;
 
-  case 'mr' :
-    caller = getMR
-    break;
+    case 'mr' :
+      caller = getMR
+      break;
   }
 
   return caller(props)
@@ -397,19 +469,19 @@ export const getPoint = (scaleType, props) => {
  */
 export const getSineCosine = (scaleType, angle) => {
   switch (scaleType) {
-  case 'tr':
-  case 'tm':
-  case 'bl':
-  case 'bm':
-    return {
-      cos: Math.cos(-angle * (Math.PI / 180)),
-      sin: Math.sin(-angle * (Math.PI / 180))
-    }
-  default:
-    return {
-      sin: Math.sin(angle * (Math.PI / 180)),
-      cos: Math.cos(angle * (Math.PI / 180))
-    }
+    case 'tr':
+    case 'tm':
+    case 'bl':
+    case 'bm':
+      return {
+        cos: Math.cos(-angle * (Math.PI / 180)),
+        sin: Math.sin(-angle * (Math.PI / 180))
+      }
+    default:
+      return {
+        sin: Math.sin(angle * (Math.PI / 180)),
+        cos: Math.cos(angle * (Math.PI / 180))
+      }
   }
 }
 
@@ -426,35 +498,35 @@ export const getSineCosine = (scaleType, angle) => {
 export const getMovePoint = (scaleType, oppositePoint, point, moveDiff) => {
   switch (scaleType) {
 
-  case 'tl':
-    return {
-      x: oppositePoint.x - (moveDiff.x + point.x),
-      y: oppositePoint.y - (moveDiff.y + point.y),
-    }
-  case 'ml':
-    return {
-      x: oppositePoint.x - moveDiff.x - point.x,
-      y: oppositePoint.y - moveDiff.y - point.y,
-    }
+    case 'tl':
+      return {
+        x: oppositePoint.x - (moveDiff.x + point.x),
+        y: oppositePoint.y - (moveDiff.y + point.y),
+      }
+    case 'ml':
+      return {
+        x: oppositePoint.x - moveDiff.x - point.x,
+        y: oppositePoint.y - moveDiff.y - point.y,
+      }
 
-  case 'tr' :
-  case 'tm':
-    return {
-      x: point.x + (moveDiff.x - oppositePoint.x),
-      y: oppositePoint.y - (moveDiff.y + point.y)
-    }
-  case 'mr':
-  case 'br':
-    return {
-      x: point.x + (moveDiff.x - oppositePoint.x),
-      y: point.y + (moveDiff.y - oppositePoint.y)
-    }
-  case 'bl':
-  case 'bm':
-    return {
-      x: oppositePoint.x - (moveDiff.x + point.x),
-      y: point.y + (moveDiff.y - oppositePoint.y)
-    }
+    case 'tr' :
+    case 'tm':
+      return {
+        x: point.x + (moveDiff.x - oppositePoint.x),
+        y: oppositePoint.y - (moveDiff.y + point.y)
+      }
+    case 'mr':
+    case 'br':
+      return {
+        x: point.x + (moveDiff.x - oppositePoint.x),
+        y: point.y + (moveDiff.y - oppositePoint.y)
+      }
+    case 'bl':
+    case 'bm':
+      return {
+        x: oppositePoint.x - (moveDiff.x + point.x),
+        y: point.y + (moveDiff.y - oppositePoint.y)
+      }
   }
 }
 
@@ -473,4 +545,38 @@ const getOriginalPositionFromScale = (position, size, scale) => {
   const diff = changed - size
 
   return position - diff
+}
+
+
+/**
+ * Find the real position of lowest and highest handle
+ *
+ * @param point
+ * @returns {{x: number, y: number}|*}
+ */
+export const minMax = (point) => {
+
+  const points = [
+    getTL(point),
+    getTR(point),
+    getBL(point),
+    getBR(point)
+  ];
+
+  const bounds = points.reduce((bounds, point, c) => {
+    if (c === 0) {
+      bounds.xmin = point.x;
+      bounds.xmax = point.x;
+      bounds.ymin = point.y;
+      bounds.ymax = point.y;
+    } else {
+      bounds.xmin = Math.min(bounds.xmin, point.x);
+      bounds.xmax = Math.max(bounds.xmax, point.x);
+      bounds.ymin = Math.min(bounds.ymin, point.y);
+      bounds.ymax = Math.max(bounds.ymax, point.y);
+    }
+    return bounds
+  }, {});
+
+  return bounds;
 }
