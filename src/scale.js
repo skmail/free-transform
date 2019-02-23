@@ -11,8 +11,7 @@ import {
  *
  * @param {string} scaleType scale point position name
  * @param {Object} payload an object holding element information
- * @param {number} payload.startX mouse down position on X axis
- * @param {number} payload.startY mouse down position on Y axis
+ * @param {event} payload.event the mousedown event object
  * @param {number} payload.x position of x
  * @param {number} payload.y position of y
  * @param {number} payload.scaleX amount of scale for x (width)
@@ -21,17 +20,20 @@ import {
  * @param {number} payload.height original height
  * @param {number} payload.angle the angle of rotation
  * @param {number} payload.scaleLimit minimum scale limit
- * @param {boolean} payload.scaleFromCenter is scale from center
- * @param {boolean} payload.aspectRatio is scale on aspect ration
+ * @param {boolean} payload.scaleFromCenter by default scale from center
+ * @param {boolean|number} payload.aspectRatio by default scale on aspect ration
+ * @param {boolean} payload.enableScaleFromCenter completely disable scale from center
+ * @param {boolean} payload.enableAspectRatio completely disable enforced aspect ratios
  * @param {Function} onUpdate a callback on mouse up
  *
  * @returns {Function} a function for mouse move
  */
 export default (scaleType, {
-  startX,
-  startY,
+  event,
   x,
   y,
+  startX, // for backwards compatability, but should remove eventually
+  startY, // for backwards compatability
   scaleX,
   scaleY,
   width,
@@ -44,61 +46,47 @@ export default (scaleType, {
   enableAspectRatio = true
 }, onUpdate) => {
 
-  const ratio = (width * scaleX) / (height * scaleY)
+  // allow ratio to be set at a specific ratio
+  const ratio = aspectRatio && aspectRatio != true ? aspectRatio : (width * scaleX) / (height * scaleY);
 
-  let point = getPoint(scaleType, {x, y, scaleX, scaleY, width, height, angle, scaleFromCenter});
+  let point; 
+  let oppositePoint;
+  // let startX; // uncomment when removing them as arguments
+  // let startY;
+  if(!event) { // prevents breaking change
+    event = {
+      pageX: startX,
+      pageY: startY,
+      altKey: scaleFromCenter,
+      shiftKey: aspectRatio,
+    }
 
-  let oppositePoint = getOppositePoint(scaleType, {
-    x,
-    y,
-    scaleX,
-    scaleY,
-    width,
-    height,
-    angle
-  })
-
-  const currentProps = {
-    x,
-    y,
-    scaleX,
-    scaleY,
+    scaleFromCenter = false;
+    aspectRatio = false;
   }
 
-  return (event) => {
+  const currentProps = { x, y, scaleX, scaleY };
 
-    if(enableScaleFromCenter && ((event.altKey && !scaleFromCenter) || (!event.altKey && scaleFromCenter))){
+  var prevScaleFromCenterToggled = null; // will always fire the first time because scaleFromCenterToggled will always be true/false
+  const drag = (event) => {
 
-      startX = event.pageX
-      startY = event.pageY
+    // check control keys
+    let aspectRatioToggled = enableAspectRatio && !event.shiftKey != !aspectRatio;
+    let scaleFromCenterToggled = enableScaleFromCenter && !event.altKey != !scaleFromCenter;
 
-      scaleFromCenter = event.altKey && !scaleFromCenter
+    // initialize center if point changed.
+    if(scaleFromCenterToggled !== prevScaleFromCenterToggled) {
+      prevScaleFromCenterToggled = scaleFromCenterToggled;
 
-      point = getPoint(scaleType, {
-        ...currentProps,
-        width,
-        height,
-        angle,
-        scaleFromCenter
-      });
+      startX = event.pageX;
+      startY = event.pageY;
 
-      oppositePoint = getOppositePoint(scaleType, {
-        ...currentProps,
-        width,
-        height,
-        angle
-      })
+      point = getPoint(scaleType, { ...currentProps, width, height, angle, scaleFromCenter: scaleFromCenterToggled });
+      oppositePoint = getOppositePoint(scaleType, { ...currentProps, width, height, angle });
+
+      return; // moveDiff will be zero anyway. this is just an initializing call.
     }
 
-    if(!event.shiftKey && aspectRatio ){
-      aspectRatio = false
-    } else if(event.shiftKey && !aspectRatio ){
-      aspectRatio = true
-    }
-
-    if(!enableAspectRatio){
-      aspectRatio = false
-    }
     const moveDiff = {
       x: event.pageX - startX,
       y: event.pageY - startY
@@ -106,7 +94,7 @@ export default (scaleType, {
 
     const movePoint = getMovePoint(scaleType, oppositePoint, point, moveDiff)
 
-    if (enableScaleFromCenter && scaleFromCenter) {
+    if (scaleFromCenterToggled) {
       movePoint.x *= 2
       movePoint.y *= 2
     }
@@ -117,33 +105,32 @@ export default (scaleType, {
       x: movePoint.x * cos + movePoint.y * sin,
       y: movePoint.y * cos - movePoint.x * sin
     }
-
-    currentProps.scaleX = (rotationPoint.x / width) > scaleLimit ? rotationPoint.x / width : scaleLimit
-    currentProps.scaleY = (rotationPoint.y / height) > scaleLimit ? rotationPoint.y / height : scaleLimit
-
+    
+    currentProps.scaleX = Math.max(rotationPoint.x / width, scaleLimit);
+    currentProps.scaleY = Math.max(rotationPoint.y / height, scaleLimit);
 
     switch (scaleType) {
     case 'ml':
     case 'mr':
       currentProps.scaleY = scaleY
-      if (aspectRatio) {
+      if (aspectRatioToggled) {
         currentProps.scaleY = ((width * currentProps.scaleX) * (1 / ratio)) / height;
       }
       break;
     case 'tm':
     case 'bm':
       currentProps.scaleX = scaleX
-      if (aspectRatio) {
+      if (aspectRatioToggled) {
         currentProps.scaleX = ((height * currentProps.scaleY) * ratio) / width;
       }
       break;
     default:
-      if (aspectRatio) {
+      if (aspectRatioToggled) {
         currentProps.scaleY = ((width * currentProps.scaleX) * (1 / ratio)) / height;
       }
     }
 
-    if (enableScaleFromCenter && scaleFromCenter) {
+    if (scaleFromCenterToggled) {
       const center = getCenter({
         x,
         y,
@@ -169,6 +156,9 @@ export default (scaleType, {
       currentProps.y = y + (oppositePoint.y - freshOppositePoint.y)
     }
 
-    onUpdate(currentProps)
+    onUpdate(currentProps);
   }
+
+  drag(event); // run with initial mousedown event
+  return drag;
 }
