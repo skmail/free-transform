@@ -1,6 +1,6 @@
 {
   "name": "@free-transform/editor-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dexv": "vite",
@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@free-transform/core": "^1.0.0",
-    "@free-transform/vue": "^1.0.0",
+    "@free-transform/core": "^1.0.1",
+    "@free-transform/vue": "^1.0.1",
     "copy-to-clipboard": "^3.3.2",
     "vue": "^3.2.37"
   },

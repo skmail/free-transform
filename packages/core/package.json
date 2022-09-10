@@ -1,6 +1,6 @@
 {
   "name": "@free-transform/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Free transform tool utlity",
   "author": "Solaiman Kmail <psokmail@gmail.com>",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "jsdelivr": "dist/core.iife.js",
   "module": "./dist/core.mjs",
   "types": "./dist/types/index.d.ts",
-  "scripts": { 
+  "scripts": {
     "build": "tsc && vite build && tsc --declaration --emitDeclarationOnly  --noEmit false --outDir dist/types ",
     "preview": "vite preview"
   },
