@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@free-transform/core": "1.0.0",
+    "@free-transform/core": "^1.0.0",
     "vue": "^3.2.37",
     "vue-tsc": "^0.40.13"
   },
