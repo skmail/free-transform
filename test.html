@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .point {
+        width: 15px;
+        height: 15px;
+        background: red;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const createPoint = (x, y, color) => {
+        const element = document.createElement("div");
+
+        element.className = "point";
+
+        if (color) {
+          element.style.background = color;
+        }
+
+        element.style.left = x + "px";
+        element.style.top = y + "px";
+
+        document.body.appendChild(element);
+      };
+
+      
+      const p1 = [91, 248];
+      const p2 = [517, 347];
+
+      const find = (p1, p2, per) => p1 + (p2 - p1) * per;
+
+      createPoint(find(p1[0], p2[0], 0.5), find(p1[1], p2[1], 1), "blue");
+
+      createPoint(...p1);
+      createPoint(...p2);
+    </script>
+  </body>
+</html>
