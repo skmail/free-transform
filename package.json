@@ -5,7 +5,12 @@
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "demo:vue": "npm run dexv --prefix ./packages/editor-vue"
+    "demo:vue": "npm run build --prefix ./packages/editor-vue",
+    "build:core": "npm run build --prefix ./packages/core",
+    "build:vue": "npm run build --prefix ./packages/vue",
+    "build:editor-vue": "npm run build --prefix ./packages/editor-vue",
+    "build:packages": "npm run build:core && npm run build:vue",
+    "packages:publish": "lerna publish"
   },
   "author": "",
   "license": "ISC",

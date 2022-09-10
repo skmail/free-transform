@@ -22,7 +22,7 @@ type Props = ToRefs<{
   height: number;
   matrix: Matrix;
   warp: Tuple<Point, 4> | undefined;
-  disabledScale: boolean;
+  disabledScale: boolean | undefined;
 }>;
 
 export function useValues(props: Props) {

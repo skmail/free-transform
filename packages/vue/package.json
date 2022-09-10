@@ -6,8 +6,7 @@
   "jsdelivr": "dist/vue.iife.js",
   "module": "./dist/vue.mjs",
   "types": "./dist/types/index.d.ts",
-  "scripts": {
-    "dev": "vite",
+  "scripts": { 
     "build": "vue-tsc --noEmit && vite build && vue-tsc --declaration --emitDeclarationOnly  --noEmit false --outDir dist/types ",
     "preview": "vite preview"
   },

@@ -9,8 +9,7 @@
   "jsdelivr": "dist/core.iife.js",
   "module": "./dist/core.mjs",
   "types": "./dist/types/index.d.ts",
-  "scripts": {
-    "dev": "vite",
+  "scripts": { 
     "build": "tsc && vite build && tsc --declaration --emitDeclarationOnly  --noEmit false --outDir dist/types ",
     "preview": "vite preview"
   },

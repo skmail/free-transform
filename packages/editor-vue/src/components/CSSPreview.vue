@@ -51,13 +51,13 @@ import { toRefs, ref } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    disabledScale?: boolean;
+    disabledScale: boolean | undefined;
     x: number;
     y: number;
     width: number;
     height: number;
     matrix: Matrix;
-    warp?: Tuple<Point, 4>;
+    warp: Tuple<Point, 4> | undefined;
     precision: number;
   }>(),
   {
@@ -83,7 +83,7 @@ const onCopy = () => {
   copied.value = true;
   copy(matrix3d.value);
 
-  timeout.value = setTimeout(() => {
+  timeout.value = window.setTimeout(() => {
     copied.value = false;
   }, 1500);
 };

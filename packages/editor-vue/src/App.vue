@@ -97,6 +97,7 @@
         :offset="offset"
         :matrix="element.matrix"
         :warp="element.warp"
+        :disabled-scale="element.disabledScale"
       />
     </div>
 
