@@ -10,7 +10,7 @@
     "build:vue": "npm run build --prefix ./packages/vue",
     "build:editor-vue": "npm run build --prefix ./packages/editor-vue",
     "build:packages": "npm run build:core && npm run build:vue",
-    "packages:publish": "lerna publish"
+    "packages:publish": "npm run build:packages && lerna publish"
   },
   "author": "",
   "license": "ISC",
