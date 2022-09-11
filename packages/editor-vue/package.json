@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "type": "module",
   "scripts": {
-    "dexv": "vite",
+    "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },

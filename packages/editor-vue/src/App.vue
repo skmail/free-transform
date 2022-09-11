@@ -360,7 +360,7 @@ onMounted(() => {
   width: var(--handle-size);
   height: var(--handle-size);
 
-  border-radius: 100px;
+  border-radius: 2px;
   position: absolute;
   cursor: pointer;
   box-shadow: 0 0 0 1.5px #3b82f6;

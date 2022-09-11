@@ -64,7 +64,7 @@ const transform = computed(() => {
   const [x, y] = getPointAtAngle([props.offset[0], props.offset[1]], radians);
 
   return `translate(${point[0] + x}px, ${point[1] + y}px) rotate(${toDegree(
-    radians
+    -radians
   )}deg)`;
 });
 
@@ -76,7 +76,7 @@ const onDown = (event: PointerEvent) => {
 <template>
   <div
     :style="{
-      transform,
+      transform, 
     }"
     @pointerdown.stop="onDown"
   ></div>
