@@ -95,6 +95,7 @@ const svg = computed(() => {
     :width="svg.width"
     :height="svg.height"
     :viewBox="svg.viewBox"
+    fill="none"
   >
     <path :stroke-width="strokeWidth" :d="svg.d" />
   </svg>
