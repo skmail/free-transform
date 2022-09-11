@@ -1,4 +1,4 @@
-## Free Transform Tool Utility 
+## Free Transform Tool Core 
 
 
 [![NPM Version](https://img.shields.io/npm/v/@free-transform/core.svg?style=flat)](https://www.npmjs.com/package/@free-transform/core)  [![NPM Downloads](https://img.shields.io/npm/dm/@free-transform/core.svg?style=flat)](https://www.npmjs.com/package/@free-transform/core)   [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT) 
