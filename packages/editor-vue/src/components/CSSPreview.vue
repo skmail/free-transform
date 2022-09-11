@@ -64,6 +64,7 @@ const props = withDefaults(
     precision: 10,
   }
 );
+
 const refs = toRefs(props);
 const copied = ref(false);
 const timeout = ref(0);

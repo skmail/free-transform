@@ -1,6 +1,11 @@
 # Free Transfrom + Vue
  
 
+```js
+import {FreeTransform} from "@free-transform/vue"
+
+```
+
  ```html
 <FreeTransform           
     :x="0"
@@ -39,3 +44,28 @@
     />
 </FreeTransform>
  ```
+
+
+
+
+
+```js
+import {Transformed} from "@free-transform/vue"
+
+```
+
+ ```html
+<Transformed           
+    :x="0"
+    :y="0"
+    :width="100"
+    :height="100"
+    :offset="[0,0]"
+    :matrix=""
+    :warp="" 
+>
+           
+   <img src='///' />
+</Transformed>
+ ```
+

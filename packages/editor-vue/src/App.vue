@@ -47,7 +47,7 @@
           </Transformed>
         </div>
 
-        <FreeTransform          
+        <FreeTransform
           :style="{ top: 0, left: 0 }"
           v-if="element"
           :key="element.id"
@@ -61,27 +61,29 @@
           @click.stop
           @update="updateIfNotLocked(element ? element.id : '', $event)"
         >
-           
-        <Grid
-              :stroke="workspace.perspectiveGridColor"
-              fill="none"
-              :lines="workspace.perspectiveGrid"
-              :stroke-width="workspace.perspectiveGridWidth"
-            />
+          <Grid
+            :stroke="workspace.perspectiveGridColor"
+            fill="none"
+            :lines="workspace.perspectiveGrid"
+            :stroke-width="workspace.perspectiveGridWidth"
+          />
 
-            <template v-for="handle of handles">
-              <Handle
-                :position="handle"
-                class="tr-transform__rotator"
-                type="rotate"
-                :origin="[.5, .5]"
-              />
-              <Handle
-                :position="handle"
-                class="tr-transform__scale tr-transform__handle"
-                :type="mode"
-              />
-            </template>
+          <template v-for="handle of handles">
+            <Handle
+              :position="[handle[0], handle[1]]"
+              class="transform__rotator"
+              type="rotate"
+              :offset="[handle[2], handle[3]]"
+            />
+            <Handle
+              :position="[handle[0], handle[1]]"
+              :class="[
+                'transform__handle',
+                mode === 'warp' ? 'transform__handle-warp' : '',
+              ]"
+              :type="mode"
+            />
+          </template>
         </FreeTransform>
       </div>
 
@@ -114,9 +116,9 @@
 </template>
 
 <script lang="ts" setup>
-import { createMatrixFromParams, Point, toRadians } from "@free-transform/core";
+import { createMatrixFromParams } from "@free-transform/core";
 import { FreeTransform, Handle, Grid, Transformed } from "@free-transform/vue";
-import { computed, defineComponent, onMounted, ref, shallowRef } from "vue";
+import { computed, onMounted, ref, shallowRef } from "vue";
 
 import CSSPreview from "./components/CSSPreview.vue";
 import { Workspace, Element } from "./types";
@@ -134,17 +136,17 @@ const workspace = ref<Workspace>({
 });
 
 const mode = ref<"scale" | "warp">("scale");
-const handles = ref<Point[]>([
-  [0, 0],
-  [0, 1],
-  [1, 0],
-  [1, 1],
-  [0.5, 0],
-  [0, 0.5],
-  [1, 0.5],
-  [0.5, 1],
+const handles = ref<[number, number, number, number][]>([
+  [0, 0, -20, -20],
+  [0, 1, -20, 20],
+  [1, 0, 20, -20],
+  [1, 1, 20, 20],
+  [0.5, 0, 0, -20],
+  [0, 0.5, -20, 0],
+  [1, 0.5, 20, 0],
+  [0.5, 1, 0, 20],
 ]);
- 
+
 const refs = shallowRef<Record<string, any>>({});
 const offset = ref<[number, number]>([0, 0]);
 const elements = ref<Element[]>([]);
@@ -270,7 +272,6 @@ const fitContent = () => {
       height: bounds.height,
       scaleX: 1,
       scaleY: 1,
-      angle: toRadians(-180),
     }),
     warp: undefined,
     width: bounds.width,
@@ -314,24 +315,24 @@ onMounted(() => {
 </script>
 
 <style>
-.tr-transform {
+.transform {
   position: absolute;
 }
-.tr-transform--active {
+.transform--active {
   position: absolute;
   z-index: 5;
 }
 
-.tr-transform__content {
+.transform__content {
   user-select: none;
   position: absolute;
 }
-.tr-transform__content .element {
+.transform__content .element {
   padding: 5px;
 }
 
-.tr-transform__content,
-.tr-transform__controls {
+.transform__content,
+.transform__controls {
   transform-origin: 0 0;
 }
 
@@ -339,22 +340,7 @@ onMounted(() => {
   --handle-size: 10px;
 }
 
-.tr-transform__rotator:hover,
-.tr-transform__scale:hover {
-  background: #f1f5f8;
-}
-
-.tr-transform__rotator:active,
-.tr-transform__scale:active {
-  background: #dae1e7;
-}
-
-.tr-transform__handle {
-  margin-top: calc(var(--handle-size) / -2);
-  margin-left: calc(var(--handle-size) / -2);
-}
-
-.tr-transform__scale {
+.transform__handle {
   background: #fff;
   width: var(--handle-size);
   height: var(--handle-size);
@@ -363,10 +349,17 @@ onMounted(() => {
   position: absolute;
   cursor: pointer;
   box-shadow: 0 0 0 1.5px #3b82f6;
+
+  margin-top: calc(var(--handle-size) / -2);
+  margin-left: calc(var(--handle-size) / -2);
 }
 
-.tr-transform__rotator {
-  --handle-size: 35px;
+.transform__handle-warp{
+  box-shadow: 0 0 0 1.5px #db2777;
+}
+
+.transform__rotator {
+  --handle-size: 10px;
   width: var(--handle-size);
   height: var(--handle-size);
 
@@ -376,11 +369,22 @@ onMounted(() => {
 
   border-radius: 40px;
 
-  margin-top: calc(var(--handle-size) / -2);
   margin-left: calc(var(--handle-size) / -2);
+  margin-top: calc(var(--handle-size) / -2);
+  box-shadow: 0 0 0 1.5px #3b82f6;
 }
 
-.tr-transform__origin {
+.transform__rotator:hover,
+.transform__handle:hover {
+  background: #f1f5f8;
+}
+
+.transform__rotator:active,
+.transform__handle:active {
+  background: #dae1e7;
+}
+
+.transform__origin {
   --size: 10px;
   width: var(--size);
   height: var(--size);
@@ -392,13 +396,7 @@ onMounted(() => {
   box-shadow: 0 0 0px 2px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
-.tr-transform__origin:hover {
+.transform__origin:hover {
   transform: scale(1.2);
-}
-
-.tr-transform__handle-text {
-  color: #000;
-  white-space: nowrap;
-  font-size: 10px;
 }
 </style>

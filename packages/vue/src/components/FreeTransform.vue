@@ -23,7 +23,7 @@ export interface Props {
   scaleLimit?: [number, number];
   offset?: [number, number];
 
-  disabledScale?: boolean;
+  disabledScale: boolean | undefined;
 
   x: number;
   y: number;

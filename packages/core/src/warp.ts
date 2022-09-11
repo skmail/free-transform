@@ -78,15 +78,13 @@ export function warp(
 
     moveDiff[0] /= decomposed.scale.sx;
     moveDiff[1] /= decomposed.scale.sy;
-
-    // @todo fix the tuple return size
-    // @ts-ignore
-    const newHandles: Tuple<Point, 4> = handles.map((handles, index) => {
+    
+    const newHandles = warp.map((handles, index) => {
       if (nearestHandles.includes(index)) {
         return [handles[0] + moveDiff[0], handles[1] + moveDiff[1]];
       }
       return handles;
-    });
+    }) as Tuple<Point, 4>;
 
     if (isConvex(newHandles, warp)) {
       return;
