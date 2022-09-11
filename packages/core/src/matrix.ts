@@ -110,15 +110,14 @@ export function dotProduct(a: number[], b: number[]): number {
   return a.map((_, i) => a[i] * b[i]).reduce((m, n) => m + n);
 }
 
-export function multiply(a: Matrix, b: Matrix): Matrix {
+function _multiply(a: Matrix, b: Matrix): Matrix {
   return a.map((x) => transpose(b).map((y) => dotProduct(x, y))) as Matrix;
 }
-
-export function multiplies(...matrices: Matrix[]) {
+export function multiply(...matrices: Matrix[]): Matrix {
   let result = identity();
 
   for (let matrix of matrices) {
-    result = multiply(result, matrix);
+    result = _multiply(result, matrix);
   }
 
   return result;
@@ -163,7 +162,7 @@ export function matrixRotate(radians: number, origin?: Point) {
     return matrix;
   }
 
-  return multiplies(
+  return multiply(
     matrixTranslate(origin[0], origin[1]),
     matrix,
     matrixTranslate(-origin[0], -origin[1])
@@ -182,7 +181,7 @@ export function matrixScale(sx: number, sy: number, origin?: Point) {
     return matrix;
   }
 
-  return multiplies(
+  return multiply(
     matrixTranslate(origin[0], origin[1]),
     matrix,
     matrixTranslate(-origin[0], -origin[1])

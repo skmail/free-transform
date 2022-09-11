@@ -54,6 +54,7 @@ export function useRotate({
     event.preventDefault();
 
     const drag = rotate(
+      handle,
       {
         start: [event.clientX, event.clientY],
         x: x.value,
@@ -61,7 +62,6 @@ export function useRotate({
         width: width.value,
         height: height.value,
         offset: offset.value,
-        origin: handle,
         matrix: matrix.value,
         affineMatrix: affineMatrix.value,
         snap: snap.value,

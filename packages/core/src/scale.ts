@@ -16,8 +16,8 @@ interface ScaleProps {
   width: number;
   height: number;
   matrix: Matrix;
-  affineMatrix: Matrix;
-  perspectiveMatrix: Matrix;
+  affineMatrix?: Matrix;
+  perspectiveMatrix?: Matrix;
 
   fromCenter?: EventValidator<Event>;
   aspectRatio?: EventValidator<Event>;
@@ -32,8 +32,8 @@ export function scale(
     fromCenter = () => false,
     aspectRatio = () => false,
     matrix,
-    affineMatrix,
-    perspectiveMatrix,
+    affineMatrix = matrix,
+    perspectiveMatrix = matrix,
     scaleLimit,
   }: ScaleProps,
   onUpdate: (data: { matrix: Matrix }) => void

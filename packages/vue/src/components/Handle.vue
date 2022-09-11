@@ -10,6 +10,7 @@ import { computed, inject, Ref } from "vue";
 
 export interface Props {
   position: [number, number];
+  origin?: [number, number];
   type: "warp" | "rotate" | "scale";
   offset?: [number, number];
 }
@@ -69,14 +70,14 @@ const transform = computed(() => {
 });
 
 const onDown = (event: PointerEvent) => {
-  handlers[props.type]?.(props.position, event);
+  handlers[props.type]?.(props.origin || props.position, event);
 };
 </script>
 
 <template>
   <div
     :style="{
-      transform, 
+      transform,
     }"
     @pointerdown.stop="onDown"
   ></div>

@@ -44,17 +44,17 @@ function getNearestPoints(point: Point, points: Point[], returnCount = 1) {
 }
 
 interface WarpProps {
-  affineMatrix: Matrix;
-  handles: Tuple<Point, 4>;
+  matrix: Matrix;
+  warp: Tuple<Point, 4>;
   start: Point;
 }
 
 export function warp(
   handle: Point,
-  { affineMatrix, handles, start }: WarpProps,
+  { matrix, warp, start }: WarpProps,
   onUpdate: (data: WarpUpdatePayload) => void
 ): (event: Event) => void {
-  const decomposed = decompose(affineMatrix);
+  const decomposed = decompose(matrix);
   const radians = decomposed.rotation.angle;
 
   const nearestCount =
@@ -88,7 +88,7 @@ export function warp(
       return handles;
     });
 
-    if (isConvex(newHandles, handles)) {
+    if (isConvex(newHandles, warp)) {
       return;
     }
 

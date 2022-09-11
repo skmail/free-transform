@@ -41,8 +41,8 @@ export function useWarp({
       handle,
       {
         start: [event.clientX, event.clientY],
-        affineMatrix: affineMatrix.value,
-        handles: handles.value,
+        matrix: affineMatrix.value,
+        warp: handles.value,
       },
       (payload) => {
         call(onMove);

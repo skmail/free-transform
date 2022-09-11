@@ -11,20 +11,22 @@ import {
 import { value } from "./utils";
 
 interface RotateProps {
+  start: Point;
+  offset: Point;
+
   x: number;
   y: number;
   width: number;
   height: number;
-  start: Point;
-  offset: Point;
-  origin: Point;
   matrix: Matrix;
-  affineMatrix: Matrix;
+  affineMatrix?: Matrix;
+
   snap: EventValidator<Event>;
   snapDegree: number;
 }
 
 export function rotate(
+  handle: Point,
   {
     x,
     y,
@@ -32,9 +34,8 @@ export function rotate(
     height,
     start,
     offset,
-    origin,
-    affineMatrix,
     matrix,
+    affineMatrix = matrix,
     snapDegree = 15,
     snap,
   }: RotateProps,
@@ -44,22 +45,22 @@ export function rotate(
 
   const rotation = decomposed.rotation.angle;
   const angle = toDegree(rotation);
-  const absoluteOrigin = applyToPoint(matrix, [
-    width * origin[0],
-    height * origin[1],
+  const absoluteHandle = applyToPoint(matrix, [
+    width * handle[0],
+    height * handle[1],
   ]);
-
+  
   const pressAngle = Math.atan2(
-    start[1] - offset[1] - (absoluteOrigin[1] + y),
-    start[0] - offset[0] - (absoluteOrigin[0] + x)
+    start[1] - offset[1] - (absoluteHandle[1] + y),
+    start[0] - offset[0] - (absoluteHandle[0] + x)
   );
 
   return (event) => {
     let radians =
       rotation +
       Math.atan2(
-        event.clientY - offset[1] - (absoluteOrigin[1] + y),
-        event.clientX - offset[0] - (absoluteOrigin[0] + x)
+        event.clientY - offset[1] - (absoluteHandle[1] + y),
+        event.clientX - offset[0] - (absoluteHandle[0] + x)
       ) -
       pressAngle;
 
@@ -73,7 +74,7 @@ export function rotate(
 
     onUpdate({
       matrix: multiply(
-        matrixRotate(toRadians(degrees), absoluteOrigin),
+        matrixRotate(toRadians(degrees), absoluteHandle),
         affineMatrix
       ),
     });

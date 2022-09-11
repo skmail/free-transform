@@ -61,9 +61,8 @@
           @click.stop
           @update="updateIfNotLocked(element ? element.id : '', $event)"
         >
-          <template #default>
-            
-            <Grid
+           
+        <Grid
               :stroke="workspace.perspectiveGridColor"
               fill="none"
               :lines="workspace.perspectiveGrid"
@@ -75,6 +74,7 @@
                 :position="handle"
                 class="tr-transform__rotator"
                 type="rotate"
+                :origin="[.5, .5]"
               />
               <Handle
                 :position="handle"
@@ -82,7 +82,6 @@
                 :type="mode"
               />
             </template>
-          </template>
         </FreeTransform>
       </div>
 

@@ -1,96 +1,98 @@
 ## Free Transform Tool Utility 
 
 
-[![NPM Version](https://img.shields.io/npm/v/free-transform.svg?style=flat)](https://www.npmjs.com/package/free-transform)  [![NPM Downloads](https://img.shields.io/npm/dm/free-transform.svg?style=flat)](https://www.npmjs.com/package/free-transform)   [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://img.shields.io/travis/skmail/free-transform/master.svg?style=flat)](https://travis-ci.org/skmail/free-transform)   [![codecov.io](https://codecov.io/gh/skmail/free-transform/branch/master/graph/badge.svg)](https://codecov.io/gh/skmail/free-transform) 
+[![NPM Version](https://img.shields.io/npm/v/@free-transform/core.svg?style=flat)](https://www.npmjs.com/package/@free-transform/core)  [![NPM Downloads](https://img.shields.io/npm/dm/@free-transform/core.svg?style=flat)](https://www.npmjs.com/package/@free-transform/core)   [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT) 
+
+A set of functions to perform shape transformations, including, `Scale`, `Rotate`, `Translate` & `Warping`
 
 
-A set of functions to calculate boundries element resizing, translating, rotating and styles object extraction 
+# Installation 
+`npm install @free-transform/core`
 
 
-## Installation 
-`npm install free-transform`
+# Usage 
+
+## Scale
+### scale types (Handles)
+
+Scale handles can be specified origin points 
+
+`[0, 0]`  left-top
+
+`[0, 1]`  left-bottom
+
+`[1, 0]`  right-top
+
+`[1, 1]`  right-bottom
+
+`[0, .5]`  left-middle
+
+`[1, .5]`  right-middle
+
+`[0.5, 0]`  middle-top
+
+`[0.5, 1]`  middle-bottom
+
+`[number, number]` any numeric value can be used to specify scale handle but it could introduce undesired behaviour
 
 
-## Usage 
 
-### Scale
-
-#### scale types (Handles)
-`tl` Top Left Handle
-
-`ml` Middle Left Handle
-
-`tr` Top Right Handle
-
-`tm` Top Middle Handle
-
-`bl` Bottom Left Handle
-
-`bm` Bottom Middle Handle
-
-`br` Bottom Right Handle
-
-`mr` Middle Right Handle
 
 
 ```js
-import {scale} from 'free-transform'
+import {scale, createMatrixFromParams} from '@free-transform/core'
 
 let element = {
   x:0,
   y:0,
-  scaleX:1,
-  scaleY:1,
   width:100,
   height:100,
-  angle:0,
-  scaleLimit:0.1, 
+  matrix: createMatrixFromParams()  
 }
 
 const onScaleHandleMouseDown = (event) => {
   
   event.stopPropagation();
   event.preventDefault();
-  const drag = scale('tl', {
-    startX: event.pageX,
-    startY: event.clientY,
-    scaleFromCenter: event.altKey,
-    aspectRatio: event.shiftKey,
-    ...element,   
-  }, (payload) => { // {x, y, scaleX, scaleY}
+  // scale from top left
+  const drag = scale([0,0 ], {
+    start: [event.pageX, event.clientY],
+    // scale from center only when alt key is pressed
+    fromCenter: (event => event.altKey),
+    // scale to aspect ration only when shift key is pressed
+    aspectRatio: (event) => event.shiftKey,    
+    ...element,    
+  }, (payload) => { // {matrix:Matrix}
     // dragging
     element = { ...element, ...payload }
   });
   
   const up = () => {
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', up);
+    document.removeEventListener('pointermove', drag);
+    document.removeEventListener('pointerup', up);
   };
 
-  document.addEventListener("mousemove", drag)
-  document.addEventListener("mouseup", up)
+  document.addEventListener("pointermove", drag)
+  document.addEventListener("pointerup", up)
   
 }
 
 ```
-### Rotation
-
-
-
+## Rotation
 ```js
 
-import {rotate} from 'free-transform'
+import {rotate, createMatrixFromParams, toRadians} from '@free-transform/core'
 
 let element = {
   x:0,
   y:0,
-  scaleX:1,
-  scaleY:1,
   width:100,
   height:100,
-  angle:0,
-  scaleLimit:0.1, 
+  matrix: createMatrixFromParams({
+    angle: toRadians(45)
+  })  
 }
+
 
 const onRotateHandleMouseDown = (event) => {
   
@@ -98,40 +100,36 @@ const onRotateHandleMouseDown = (event) => {
   event.preventDefault();
       
   const drag = rotate({
-    startX: event.pageX,
-    startY: event.clientY, 
-    offsetX: 0, // the offset x of parent (parent.offsetLeft)
-    offsetY: 0, // the offset y of parent (parent.offsetTop)
+    start: [event.pageX,event.clientY] 
+    offset: [0, 0], // the parent element offset
     ...element,   
-  }, (payload) => { // {angle}
+    snap: (event) => event.altKey,
+    snapDegree: 15,
+  }, (payload) => { // {matrix}
     // dragging
     element = { ...element, ...payload }
   });
   
   const up = () => {
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', up);
+    document.removeEventListener('pointermove', drag);
+    document.removeEventListener('pointerup', up);
   };
 
-  document.addEventListener("mousemove", drag)
-  document.addEventListener("mouseup", up)
+  document.addEventListener("pointermove", drag)
+  document.addEventListener("pointerup", up)
 }
 
 ```
 
 
-### Translation (Dragging)
+## Translation (Dragging)
 
 ```js
+import {translate} from '@free-transform/core'
+
 let element = {
   x:0,
   y:0,
-  scaleX:1,
-  scaleY:1,
-  width:100,
-  height:100,
-  angle:0,
-  scaleLimit:0.1, 
 }
 
 const onElementMouseDown = (event) => {
@@ -140,20 +138,191 @@ const onElementMouseDown = (event) => {
     const drag = translate({
       x: element.x,
       y: element.y,
-      startX: event.pageX,
-      startY: event.clientY
+      start: [event.pageX,event.clientY]
     }, (payload) => { // {x,y}
       // dragging     
       element = { ...element, ...payload }
     });
     
     const up = () => {
-      document.removeEventListener('mousemove', drag);
-      document.removeEventListener('mouseup', up);
+      document.removeEventListener('pointermove', drag);
+      document.removeEventListener('pointerup', up);
     };
     
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', up);
+    document.addEventListener('pointermove', drag);
+    document.addEventListener('pointerup', up);
 }
 
 ```
+
+
+## Warp (Perspective transofrmation)
+
+```js
+import {warp, createMatrixFromParams, makeWarpPoints} from '@free-transform/core'
+
+
+let element = {
+  x:0,
+  y:0,
+  width:100,
+  height:100,
+  matrix: createMatrixFromParams()  
+}
+
+element.warp = makeWarpPoints(element.width, element.height)
+
+const onElementMouseDown = (event) => {
+    event.stopPropagation();
+
+    // warp from left-top handle
+    const drag = warp([0, 0], {
+      start: [event.pageX,event.clientY],
+      warp: element.warp,
+      matrix: element.matrix,
+    }, (payload) => { // {warp}
+      // dragging     
+      element = { ...element, ...payload }
+    });
+    
+    const up = () => {
+      document.removeEventListener('pointermove', drag);
+      document.removeEventListener('pointerup', up);
+    };
+    
+    document.addEventListener('pointermove', drag);
+    document.addEventListener('pointerup', up);
+}
+
+```
+
+
+
+## All together
+
+in order to make all transformations works together, we need to generate a new Perspective matrix  to work on homogeneous coordinates
+
+
+```js
+
+
+import {
+  rotate,
+  warp,
+  scale,
+  createMatrixFromParams,
+  makeWarpPoints,
+  makePerspectiveMatrix,
+  multiply
+} from '@free-transform/core'
+
+ 
+let element = {
+  x:0,
+  y:0,
+  width:100,
+  height:100,
+  matrix: createMatrixFromParams()  
+}
+
+element.warp = makeWarpPoints(element.width, element.height)
+ 
+const onScaleHandleMouseDown = (event) => {
+ 
+  const drag = scale([0,0 ], {
+    start: [event.pageX, event.clientY],
+    fromCenter: (event => event.altKey),
+    aspectRatio: (event) => event.shiftKey,    
+    ...element,    
+
+    // created using the new warp points
+    perspectiveMatrix,
+
+    // contains scale & rotation values
+    affineMatrix: element.matrix,
+    
+    // the final matrix
+    matrix: multiply(element.matrix, perspectiveMatrix)
+  }, (payload) => { // {matrix:Matrix}
+    // dragging
+    element = { ...element, ...payload }
+  }); 
+}
+
+
+
+const onRotateHandleMouseDown = (event) => {
+   const perspectiveMatrix = makePerspectiveMatrix(
+    makeWarpPoints(element.width, element.height),
+    element.warp
+  )
+ 
+  const drag = rotate({
+    start: [event.pageX,event.clientY] 
+    offset: [0, 0], // the parent element offset
+    ...element,   
+    snap: (event) => event.altKey,
+    snapDegree: 15,
+
+    // contains scale & rotation values
+    affineMatrix: element.matrix,
+    
+    // the final matrix
+    matrix: multiply(element.matrix, perspectiveMatrix)
+  }, (payload) => { // {matrix}
+    // dragging
+    element = { ...element, ...payload }
+  });
+}
+```
+
+
+## Output to css matrix3d
+
+```js
+
+import {
+  rotate,
+  warp,
+  scale,
+  createMatrixFromParams,
+  makeWarpPoints,
+  makePerspectiveMatrix,
+  multiply,
+  transpose,
+  translateMatrix
+} from '@free-transform/core'
+
+
+  let element = {
+    x:0,
+    y:0,
+    width:100,
+    height:100,
+    matrix: createMatrixFromParams()  
+  }
+
+  element.warp = makeWarpPoints(element.width, element.height)
+
+  const perspectiveMatrix = makePerspectiveMatrix(
+    makeWarpPoints(element.width, element.height),
+    element.warp
+  )
+
+
+ const outputMatrix = multiply(
+  element.matrix,
+  perspectiveMatrix,
+  translateMatrix(element.x, element.y)
+ ) ;
+
+
+  const string = transpose(outputMatrix).map((v) =>
+    v.map((v) => Number(v.toFixed(10)))
+  );
+
+  const tansform = `matrix3d(${string})`;
+
+```
+
+
