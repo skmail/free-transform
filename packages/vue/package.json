@@ -12,14 +12,13 @@
   },
   "dependencies": {
     "@free-transform/core": "^1.0.1",
-    "vue": "^3.2.37",
-    "vue-tsc": "^0.40.13"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
-    "vue-tsc": "^0.40.4"
+    "vue-tsc": "^0.40.13"
   },
   "gitHead": "73dcef0c0dd1959e5e3831ffdec0d0aacd6487d2"
 }
