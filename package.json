@@ -6,10 +6,9 @@
     "bootstrap": "npx lerna bootstrap",
     "test": "echo \"Error: no test specified\" && exit 1",
     "demo:vue": "npm run dev --prefix ./packages/editor-vue",
-    "build:demo:vue": "npm run build --prefix ./packages/editor-vue",
     "build:core": "npm run build --prefix ./packages/core",
     "build:vue": "npm run build --prefix ./packages/vue",
-    "build:editor-vue": "build:packages && npm run build --prefix ./packages/editor-vue",
+    "build:demo:vue": "npm run build:packages && npm run build --prefix ./packages/editor-vue",
     "build:packages": "npm run build:core && npm run build:vue",
     "packages:publish": "npm run build:packages && lerna publish"
   },
