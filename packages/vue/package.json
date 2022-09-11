@@ -1,6 +1,6 @@
 {
   "name": "@free-transform/vue",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/vue.umd.js",
   "unpkg": "dist/vue.iife.js",
   "jsdelivr": "dist/vue.iife.js",
@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@free-transform/core": "^1.0.1",
+    "@free-transform/core": "^1.0.2",
     "vue": "^3.2.37"
   },
   "devDependencies": {
