@@ -21,6 +21,5 @@
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vue-tsc": "^0.40.4"
-  },
-  "gitHead": "73dcef0c0dd1959e5e3831ffdec0d0aacd6487d2"
+  }
 }
