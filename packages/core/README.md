@@ -282,15 +282,12 @@ const onRotateHandleMouseDown = (event) => {
 ```js
 
 import {
-  rotate,
-  warp,
-  scale,
   createMatrixFromParams,
   makeWarpPoints,
   makePerspectiveMatrix,
   multiply,
   transpose,
-  translateMatrix
+  matrixTranslate
 } from '@free-transform/core'
 
 let element = {
@@ -311,7 +308,7 @@ const perspectiveMatrix = makePerspectiveMatrix(
 const outputMatrix = multiply(
   element.matrix,
   perspectiveMatrix,
-  translateMatrix(element.x, element.y)
+  matrixTranslate(element.x, element.y)
 ) ;
 
 
