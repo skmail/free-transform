@@ -293,35 +293,33 @@ import {
   translateMatrix
 } from '@free-transform/core'
 
+let element = {
+  x:0,
+  y:0,
+  width:100,
+  height:100,
+  matrix: createMatrixFromParams()  
+}
 
-  let element = {
-    x:0,
-    y:0,
-    width:100,
-    height:100,
-    matrix: createMatrixFromParams()  
-  }
+element.warp = makeWarpPoints(element.width, element.height)
 
-  element.warp = makeWarpPoints(element.width, element.height)
+const perspectiveMatrix = makePerspectiveMatrix(
+  makeWarpPoints(element.width, element.height),
+  element.warp
+)
 
-  const perspectiveMatrix = makePerspectiveMatrix(
-    makeWarpPoints(element.width, element.height),
-    element.warp
-  )
-
-
- const outputMatrix = multiply(
+const outputMatrix = multiply(
   element.matrix,
   perspectiveMatrix,
   translateMatrix(element.x, element.y)
- ) ;
+) ;
 
 
-  const string = transpose(outputMatrix).map((v) =>
-    v.map((v) => Number(v.toFixed(10)))
-  );
+const string = transpose(outputMatrix).map((v) =>
+  v.map((v) => Number(v.toFixed(10)))
+);
 
-  const tansform = `matrix3d(${string})`;
+const tansform = `matrix3d(${string})`;
 
 ```
 
