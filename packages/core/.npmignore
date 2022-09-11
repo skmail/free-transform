@@ -5,3 +5,5 @@ package.json
 package-lock.json
 yarn-error.log
 .idea
+vite.config.ts
+tsconfig.json
