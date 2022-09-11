@@ -1,0 +1,10 @@
+__tests__
+node_modules
+src
+package.json
+package-lock.json
+yarn-error.log
+.idea
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
