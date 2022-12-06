@@ -2,6 +2,7 @@ import {
   decompose,
   makeWarpPoints,
   Matrix,
+  matrixRotate,
   Point,
   Tuple,
 } from "@free-transform/core";
@@ -74,6 +75,7 @@ export function useValues(props: Props) {
       );
     }
 
+    return mat;
     return multiply(mat, perspectiveMatrix.value);
   });
 
@@ -82,8 +84,8 @@ export function useValues(props: Props) {
   );
 
   return {
-    x:props.x,
-    y:props.y,
+    x: props.x,
+    y: props.y,
     width,
     height,
     warpPoints,

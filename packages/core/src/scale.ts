@@ -93,7 +93,9 @@ export function scale(
           (bounds.width * newScale[0] * (1 / ratio)) / bounds.height;
       } else if (scaleType[1] === 0 || scaleType[1] === 1) {
         const ratio = bounds.height / bounds.width;
-        newScale[0] = (height * newScale[1] * ratio) / width;
+        newScale[0] =
+          (bounds.height * newScale[1] * (1 / ratio)) / bounds.width;
+ 
       }
     }
 

@@ -201,22 +201,28 @@ export function createMatrixFromParams({
 }
 
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/inverse.js
+// http://www.wolframalpha.com/input/?i=Inverse+%5B%7B%7Ba,c,e%7D,%7Bb,d,f%7D,%7B0,0,1%7D%7D%5D
+
 export function inverseAffine(matrix: Matrix): Matrix {
-  const denominator = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+  const a = matrix[0][0];
+  const b = matrix[0][1];
+  const c = matrix[1][0];
+  const d = matrix[1][1];
+  const e = matrix[0][3];
+  const f = matrix[1][3];
 
   return [
     [
-      matrix[1][1] / denominator,
-      matrix[0][1] / -denominator,
+      d / (a * d - b * c),
+      c / (b * c - a * d),
       0,
-      (matrix[1][1] * matrix[0][3] - matrix[1][0] * matrix[1][3]) /
-        -denominator,
+      (d * e - c * f) / (b * c - a * d),
     ],
     [
-      matrix[1][0] / -denominator,
-      matrix[0][0] / denominator,
+      b / (b * c - a * d),
+      a / (a * d - b * c),
       0,
-      (matrix[0][1] * matrix[0][3] - matrix[0][0] * matrix[1][3]) / denominator,
+      (b * e - a * f) / (a * d - b * c),
     ],
     [0, 0, 1, 0],
     [0, 0, 0, 1],

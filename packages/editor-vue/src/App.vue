@@ -244,8 +244,7 @@ const updateWorkspace = (data: Partial<Workspace>) => {
   workspace.value = {
     ...workspace.value,
     ...data,
-  };
-  console.log(data);
+  }; 
 };
 const fitContent = () => {
   if (!element.value) {
