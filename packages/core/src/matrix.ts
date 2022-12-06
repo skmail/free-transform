@@ -248,7 +248,7 @@ export function decompose(matrix: Matrix) {
     result.scale.sy = (sx * sy - rx * ry) / hypotAc;
     const acos = Math.acos(sx / hypotAc);
     result.rotation.angle = ry > 0 ? -acos : acos;
-  } else if (rx !== 0 || sx !== 0) {
+  } else if (rx !== 0 || sy !== 0) {
     const hypotBd = Math.hypot(rx, sy);
     result.scale.sx = (sx * sy - rx * ry) / hypotBd;
     result.scale.sy = hypotBd;
