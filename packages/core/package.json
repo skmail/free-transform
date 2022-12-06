@@ -1,0 +1,21 @@
+{
+  "name": "@free-transform/core",
+  "version": "1.0.5",
+  "description": "Free transform tool utlity",
+  "author": "Solaiman Kmail <psokmail@gmail.com>",
+  "license": "MIT",
+  "main": "dist/core.umd.js",
+  "unpkg": "dist/core.iife.js",
+  "jsdelivr": "dist/core.iife.js",
+  "module": "./dist/core.mjs",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc && vite build && tsc --declaration --emitDeclarationOnly  --noEmit false --outDir dist/types ",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.2",
+    "vite": "^3.1.0"
+  },
+  "gitHead": "bd7920944c3db3f70c620ece4d8b186212c00103"
+}
