@@ -12,3 +12,9 @@ export const getPointAtAngle = ([x, y]: Point, radians: number): Point => {
   const cos = Math.cos(radians);
   return [x * cos + y * sin, y * cos - x * sin];
 };
+
+export function wrapAngle(radians: number) {
+  while (radians < -Math.PI) radians += 2 * Math.PI;
+  while (radians >= Math.PI) radians -= 2 * Math.PI;
+  return radians;
+}
