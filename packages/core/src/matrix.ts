@@ -111,7 +111,22 @@ export function dotProduct(a: number[], b: number[]): number {
 }
 
 function _multiply(a: Matrix, b: Matrix): Matrix {
-  return a.map((x) => transpose(b).map((y) => dotProduct(x, y))) as Matrix;
+  return [
+    [
+      a[0][0] * b[0][0] + a[1][0] * b[0][1],
+      a[0][1] * b[0][0] + a[1][1] * b[0][1],
+      0,
+      a[0][0] * b[0][3] + a[1][0] * b[1][3] + a[0][3],
+    ],
+    [
+      a[0][0] * b[1][0] + a[1][0] * b[1][1],
+      a[0][1] * b[1][0] + a[1][1] * b[1][1],
+      0,
+      0,
+    ],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  ];
 }
 export function multiply(...matrices: Matrix[]): Matrix {
   let result = identity();
@@ -196,7 +211,7 @@ export function createMatrixFromParams({
 } = {}) {
   return multiply(
     matrixRotate(angle, [width / 2, height / 2]),
-    matrixScale(scaleX, scaleY),
+    matrixScale(scaleX, scaleY)
   );
 }
 
@@ -206,18 +221,21 @@ export function createMatrixFromParams({
 export function inverseAffine(matrix: Matrix): Matrix {
   const a = matrix[0][0];
   const b = matrix[0][1];
+
   const c = matrix[1][0];
   const d = matrix[1][1];
+
   const e = matrix[0][3];
   const f = matrix[1][3];
 
   const determinant = a * d - b * c;
+
   return [
-    [d / determinant, -b / determinant, 0, (c * f - d * e) / determinant],
-    [-c / determinant, a / determinant, 0, (b * e - a * f) / determinant],
+    [d / determinant, -b / determinant, 0, (d * e - b * f) / -determinant],
+    [-c / determinant, a / determinant, 0, (c * e - a * f) / determinant],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
-  ]
+  ];
 }
 
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
@@ -248,4 +266,10 @@ export function decompose(matrix: Matrix) {
   }
 
   return result;
+}
+
+export function round(matrix: Matrix, precision = 10000000000) {
+  return matrix.map((row) =>
+    row.map((value) => Math.round(value * precision) / precision)
+  );
 }

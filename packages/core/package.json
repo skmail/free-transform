@@ -22,6 +22,7 @@
   },
   "gitHead": "bd7920944c3db3f70c620ece4d8b186212c00103",
   "dependencies": {
+    "transformation-matrix": "^2.14.0",
     "ts-jest": "^29.0.3"
   }
 }
