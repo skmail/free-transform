@@ -1,4 +1,4 @@
-import { toRadians, toDegree } from "./angle";
+import { toRadians, toDegree, wrapAngle } from "./angle";
 import { applyToPoint, decompose, matrixRotate, multiply } from "./matrix";
 import {
   Event,
@@ -49,7 +49,7 @@ export function rotate(
     width * handle[0],
     height * handle[1],
   ]);
-  
+
   const pressAngle = Math.atan2(
     start[1] - offset[1] - (absoluteHandle[1] + y),
     start[0] - offset[0] - (absoluteHandle[0] + x)
@@ -74,7 +74,7 @@ export function rotate(
 
     onUpdate({
       matrix: multiply(
-        matrixRotate(toRadians(degrees), absoluteHandle),
+        matrixRotate(wrapAngle(toRadians(degrees)), absoluteHandle),
         affineMatrix
       ),
     });
