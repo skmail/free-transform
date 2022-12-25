@@ -195,8 +195,8 @@ export function createMatrixFromParams({
   height = 0,
 } = {}) {
   return multiply(
+    matrixRotate(angle, [width / 2, height / 2]),
     matrixScale(scaleX, scaleY),
-    matrixRotate(angle, [width / 2, height / 2])
   );
 }
 
@@ -211,22 +211,13 @@ export function inverseAffine(matrix: Matrix): Matrix {
   const e = matrix[0][3];
   const f = matrix[1][3];
 
+  const determinant = a * d - b * c;
   return [
-    [
-      d / (a * d - b * c),
-      c / (b * c - a * d),
-      0,
-      (d * e - c * f) / (b * c - a * d),
-    ],
-    [
-      b / (b * c - a * d),
-      a / (a * d - b * c),
-      0,
-      (b * e - a * f) / (a * d - b * c),
-    ],
+    [d / determinant, -b / determinant, 0, (c * f - d * e) / determinant],
+    [-c / determinant, a / determinant, 0, (b * e - a * f) / determinant],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
-  ];
+  ]
 }
 
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js

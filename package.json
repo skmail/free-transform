@@ -11,7 +11,8 @@
     "build:demo:vue": "npm run build:packages && npm run build --prefix ./packages/editor-vue",
     "build:packages": "npm run build:core && npm run build:vue",
     "packages:publish": "npm run build:packages && lerna publish",
-    "start:demo:vue": "npm run build:packages && npm run dev --prefix ./packages/editor-vue"
+    "start:demo:vue": "npm run build:packages && npm run dev --prefix ./packages/editor-vue",
+    "test:watch":"lerna run test:watch"
   },
   "author": "",
   "license": "ISC",
