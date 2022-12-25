@@ -122,7 +122,7 @@ function _multiply(a: Matrix, b: Matrix): Matrix {
       a[0][0] * b[1][0] + a[1][0] * b[1][1],
       a[0][1] * b[1][0] + a[1][1] * b[1][1],
       0,
-      0,
+      a[0][1] * b[0][3] + a[1][1] * b[1][3] + a[1][3],
     ],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
@@ -232,7 +232,7 @@ export function inverseAffine(matrix: Matrix): Matrix {
 
   return [
     [d / determinant, -b / determinant, 0, (d * e - b * f) / -determinant],
-    [-c / determinant, a / determinant, 0, (c * e - a * f) / determinant],
+    [-c / determinant, a / determinant, 0, (b * e - a * f) / determinant],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ];
