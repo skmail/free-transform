@@ -253,8 +253,10 @@ export function decompose(matrix: Matrix) {
   return result;
 }
 
-export function round(matrix: Matrix, precision = 10000000000){
-  return matrix.map(
-    row => row.map(value => Math.round(value * precision) / precision) 
-  )
+export function roundMatrix(matrix: Matrix, precision = 10000000000) {
+  return matrix.map((row) => row.map((value) => round(value, precision)));
+}
+
+export function round(value: number, precision = 10000000000) {
+  return Math.round(value * precision) / precision;
 }

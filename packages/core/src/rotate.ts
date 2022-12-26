@@ -49,7 +49,7 @@ export function rotate(
     width * handle[0],
     height * handle[1],
   ]);
-  
+
   const pressAngle = Math.atan2(
     start[1] - offset[1] - (absoluteHandle[1] + y),
     start[0] - offset[0] - (absoluteHandle[0] + x)
@@ -74,7 +74,7 @@ export function rotate(
 
     onUpdate({
       matrix: multiply(
-        matrixRotate(wrapAngle(toRadians(degrees)), absoluteHandle),
+        matrixRotate(toRadians(degrees), absoluteHandle),
         affineMatrix
       ),
     });
