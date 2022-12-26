@@ -6,7 +6,7 @@ import {
   matrixScale,
   matrixTranslate,
   multiply,
-  round,
+  roundMatrix,
 } from "../matrix";
  
 describe("matrix inverse", () => {
@@ -17,7 +17,7 @@ describe("matrix inverse", () => {
       matrixScale(1, 25)
     );
 
-    expect(round(multiply(inverseAffine(matrix), matrix), 1)).toEqual(
+    expect(roundMatrix(multiply(inverseAffine(matrix), matrix), 1)).toEqual(
       identity()
     );
   });

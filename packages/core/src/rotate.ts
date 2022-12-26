@@ -1,4 +1,4 @@
-import { toRadians, toDegree, wrapAngle } from "./angle";
+import { toRadians, toDegree } from "./angle";
 import { applyToPoint, decompose, matrixRotate, multiply } from "./matrix";
 import {
   Event,
