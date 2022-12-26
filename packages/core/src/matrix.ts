@@ -111,22 +111,7 @@ export function dotProduct(a: number[], b: number[]): number {
 }
 
 function _multiply(a: Matrix, b: Matrix): Matrix {
-  return [
-    [
-      a[0][0] * b[0][0] + a[1][0] * b[0][1],
-      a[0][1] * b[0][0] + a[1][1] * b[0][1],
-      0,
-      a[0][0] * b[0][3] + a[1][0] * b[1][3] + a[0][3],
-    ],
-    [
-      a[0][0] * b[1][0] + a[1][0] * b[1][1],
-      a[0][1] * b[1][0] + a[1][1] * b[1][1],
-      0,
-      a[0][1] * b[0][3] + a[1][1] * b[1][3] + a[1][3],
-    ],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1],
-  ];
+  return a.map((x) => transpose(b).map((y) => dotProduct(x, y))) as Matrix;
 }
 export function multiply(...matrices: Matrix[]): Matrix {
   let result = identity();
@@ -232,7 +217,7 @@ export function inverseAffine(matrix: Matrix): Matrix {
 
   return [
     [d / determinant, -b / determinant, 0, (d * e - b * f) / -determinant],
-    [-c / determinant, a / determinant, 0, (b * e - a * f) / determinant],
+    [-c / determinant, a / determinant, 0, (c * e - a * f) / determinant],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ];
@@ -268,8 +253,8 @@ export function decompose(matrix: Matrix) {
   return result;
 }
 
-export function round(matrix: Matrix, precision = 10000000000) {
-  return matrix.map((row) =>
-    row.map((value) => Math.round(value * precision) / precision)
-  );
+export function round(matrix: Matrix, precision = 10000000000){
+  return matrix.map(
+    row => row.map(value => Math.round(value * precision) / precision) 
+  )
 }
