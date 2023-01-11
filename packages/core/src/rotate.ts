@@ -1,5 +1,5 @@
-import { toRadians, toDegree } from "./angle";
-import { applyToPoint, decompose, matrixRotate, multiply } from "./matrix";
+import { Angle } from "./angle";
+import { Mat } from "./matrix";
 import {
   Event,
   Matrix,
@@ -41,11 +41,11 @@ export function rotate(
   }: RotateProps,
   onUpdate: (data: RotateUpdatePayload) => void
 ): (event: Event) => void {
-  const decomposed = decompose(affineMatrix);
+  const decomposed = Mat.decompose(affineMatrix);
 
   const rotation = decomposed.rotation.angle;
-  const angle = toDegree(rotation);
-  const absoluteHandle = applyToPoint(matrix, [
+
+  const absoluteHandle = Mat.toPoint(matrix, [
     width * handle[0],
     height * handle[1],
   ]);
@@ -64,17 +64,15 @@ export function rotate(
       ) -
       pressAngle;
 
-    let degrees = toDegree(radians);
+    let degrees = Angle.degrees(radians - rotation);
 
     if (value(snap, event)) {
       degrees = Math.round(degrees / snapDegree) * snapDegree;
     }
 
-    degrees -= angle;
-
     onUpdate({
-      matrix: multiply(
-        matrixRotate(toRadians(degrees), absoluteHandle),
+      matrix: Mat.multiply(
+        Mat.rotate(Angle.radians(degrees), absoluteHandle),
         affineMatrix
       ),
     });

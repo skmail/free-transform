@@ -1,6 +1,5 @@
 import {
   translate,
-  Point,
   call,
   Event,
   TranslateUpdatePayload,

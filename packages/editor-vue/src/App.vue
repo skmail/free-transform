@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { createMatrixFromParams } from "@free-transform/core";
+import { Mat } from "@free-transform/core";
 import { FreeTransform, Handle, Grid, Transformed } from "@free-transform/vue";
 import { computed, onMounted, ref, shallowRef } from "vue";
 
@@ -171,7 +171,7 @@ const add = (data: Partial<Element> = {}) => {
     x: 0,
     y: 0,
     id: `${Math.random()}`,
-    matrix: createMatrixFromParams({
+    matrix: Mat.fromParams({
       width,
       height,
       scaleX: 1,
@@ -206,7 +206,7 @@ const setSelected = (id: string) => (selectedElement.value = id);
 
 const reset = () => {
   update(selectedElement.value, {
-    matrix: createMatrixFromParams({
+    matrix: Mat.fromParams({
       width: 100,
       height: 100,
       scaleX: 1,
@@ -225,7 +225,7 @@ const deleteElement = () => {
 
 const fitWorkspace = () => {
   update(selectedElement.value, {
-    matrix: createMatrixFromParams({
+    matrix: Mat.fromParams({
       width: 100,
       height: 100,
       scaleX: 1,
@@ -244,7 +244,7 @@ const updateWorkspace = (data: Partial<Workspace>) => {
   workspace.value = {
     ...workspace.value,
     ...data,
-  }; 
+  };
 };
 const fitContent = () => {
   if (!element.value) {
@@ -266,7 +266,7 @@ const fitContent = () => {
   dom.style.width = styles.width;
   dom.style.height = styles.height;
   update(element.value.id, {
-    matrix: createMatrixFromParams({
+    matrix: Mat.fromParams({
       width: bounds.width,
       height: bounds.height,
       scaleX: 1,
@@ -353,7 +353,7 @@ onMounted(() => {
   margin-left: calc(var(--handle-size) / -2);
 }
 
-.transform__handle-warp{
+.transform__handle-warp {
   box-shadow: 0 0 0 1.5px #db2777;
 }
 

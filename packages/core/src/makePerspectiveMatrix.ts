@@ -1,4 +1,4 @@
-import { lu, luSolve } from "./matrix";
+import { Mat } from "./matrix";
 import { Matrix, Point, Tuple } from "./types";
 
 export function makePerspectiveMatrix(
@@ -38,12 +38,9 @@ export function makePerspectiveMatrix(
     );
   }
 
-
-  const h = luSolve(
-    //@ts-ignore
-    lu(A as Tuple<Tuple<number, 8>, 8>),
-    //@ts-ignore
-    dest.reduce<Tuple<number, 8>>((acc, dest) => [...acc, ...dest], [])
+  const h = Mat.luSolve(
+    Mat.lu(A as Tuple<Tuple<number, 8>, 8>),
+    dest.reduce<number[]>((acc, dest) => [...acc, ...dest], [])
   );
 
   const H: Matrix = [

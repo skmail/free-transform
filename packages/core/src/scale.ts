@@ -1,13 +1,7 @@
-import {
-  applyToPoint,
-  applyToPoints,
-  decompose,
-  matrixScale,
-  multiply,
-} from "./matrix";
+import { Mat } from "./matrix";
+import { Angle } from "./angle";
 import { minMax } from "./minMax";
 import { makeWarpPoints } from "./makeWarpPoints";
-import { getPointAtAngle } from "./angle";
 import { Event, EventValidator, Matrix, Point } from "./types";
 import { clamp, value } from "./utils";
 
@@ -38,9 +32,9 @@ export function scale(
   }: ScaleProps,
   onUpdate: (data: { matrix: Matrix }) => void
 ): (event: Event) => void {
-  const decomposed = decompose(affineMatrix);
+  const decomposed = Mat.decompose(affineMatrix);
 
-  const bounds = minMax(applyToPoints(matrix, makeWarpPoints(width, height)));
+  const bounds = minMax(Mat.toPoints(matrix, makeWarpPoints(width, height)));
 
   const radians = decomposed.rotation.angle;
 
@@ -53,7 +47,7 @@ export function scale(
 
     const movePoint: Point = [event.clientX, event.clientY];
 
-    let moveDiff = getPointAtAngle(
+    let moveDiff = Angle.point(
       [movePoint[0] - startPoint[0], movePoint[1] - startPoint[1]],
       -radians
     );
@@ -61,12 +55,12 @@ export function scale(
     moveDiff[0] /= decomposed.scale.sx;
     moveDiff[1] /= decomposed.scale.sy;
 
-    const px1 = applyToPoint(perspectiveMatrix, [
+    const px1 = Mat.toPoint(perspectiveMatrix, [
       width * scaleType[0],
       height * scaleType[1],
     ]);
 
-    const px2 = applyToPoint(perspectiveMatrix, [
+    const px2 = Mat.toPoint(perspectiveMatrix, [
       width * opposite[0],
       height * opposite[1],
     ]);
@@ -81,7 +75,7 @@ export function scale(
       newScale[1] = (px1[1] + moveDiff[1] - px2[1]) / (px1[1] - px2[1]);
     }
 
-    const absoluteOrigin = applyToPoint(perspectiveMatrix, [
+    const absoluteOrigin = Mat.toPoint(perspectiveMatrix, [
       width * opposite[0],
       height * opposite[1],
     ]);
@@ -95,7 +89,6 @@ export function scale(
         const ratio = bounds.height / bounds.width;
         newScale[0] =
           (bounds.height * newScale[1] * (1 / ratio)) / bounds.width;
- 
       }
     }
 
@@ -105,9 +98,9 @@ export function scale(
     }
 
     onUpdate({
-      matrix: multiply(
+      matrix: Mat.multiply(
         affineMatrix,
-        matrixScale(newScale[0], newScale[1], absoluteOrigin)
+        Mat.scale(newScale[0], newScale[1], absoluteOrigin)
       ),
     });
   };

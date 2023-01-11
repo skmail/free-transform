@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import {
-  minMax,
-  applyToPoints,
-  applyToPoint,
+  minMax, 
   Matrix,
+  Mat
 } from "@free-transform/core";
 import { computed, inject, Ref } from "vue";
 
@@ -24,7 +23,7 @@ const svg = computed(() => {
   if (!matrix || !height || !width) {
     return;
   }
-  const points = applyToPoints(matrix.value, [
+  const points = Mat.toPoints(matrix.value, [
     [0, 0],
     [0, height.value],
     [width.value, height.value],
@@ -47,16 +46,16 @@ const svg = computed(() => {
   const count = Math.max(0, props.lines) + 1;
   const h = height.value / count;
   for (let i = h; i < height.value; i += h) {
-    const p = applyToPoint(matrix.value, [0, i]);
-    const p2 = applyToPoint(matrix.value, [width.value, i]);
+    const p = Mat.toPoint(matrix.value, [0, i]);
+    const p2 = Mat.toPoint(matrix.value, [width.value, i]);
     data.push(`M ${p[0]} ${p[1]}`);
     data.push(`L ${p2[0]} ${p2[1]}`);
   }
 
   const w = width.value / count;
   for (let i = w; i < width.value; i += w) {
-    const p = applyToPoint(matrix.value, [i, 0]);
-    const p2 = applyToPoint(matrix.value, [i, height.value]);
+    const p = Mat.toPoint(matrix.value, [i, 0]);
+    const p2 = Mat.toPoint(matrix.value, [i, height.value]);
     data.push(`M ${p[0]} ${p[1]}`);
     data.push(`L ${p2[0]} ${p2[1]}`);
   }

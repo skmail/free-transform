@@ -1,20 +1,12 @@
 import {
-  decompose,
+  Mat,
   makeWarpPoints,
   Matrix,
-  matrixRotate,
   Point,
   Tuple,
+  makePerspectiveMatrix,
 } from "@free-transform/core";
 import { computed, ToRefs } from "vue";
-
-import {
-  makePerspectiveMatrix,
-  inverseAffine,
-  multiply,
-  matrixScale,
-  matrixTranslate,
-} from "@free-transform/core";
 
 type Props = ToRefs<{
   x: number;
@@ -27,7 +19,9 @@ type Props = ToRefs<{
 }>;
 
 export function useValues(props: Props) {
-  const decomposedAffineMatrix = computed(() => decompose(props.matrix.value));
+  const decomposedAffineMatrix = computed(() =>
+    Mat.decompose(props.matrix.value)
+  );
 
   const width = computed(() =>
     props.disabledScale.value
@@ -64,23 +58,22 @@ export function useValues(props: Props) {
   const finalMatrix = computed(() => {
     let mat = props.matrix.value;
     if (props.disabledScale.value) {
-      const inverted = decompose(inverseAffine(props.matrix.value));
-
-      mat = multiply(
+      mat = Mat.multiply(
         props.matrix.value,
-        matrixScale(
-          inverted.scale.sx * Math.sign(decomposedAffineMatrix.value.scale.sx),
-          inverted.scale.sy * Math.sign(decomposedAffineMatrix.value.scale.sy)
+        Mat.inverse(
+          Mat.scale(
+            decomposedAffineMatrix.value.scale.sx,
+            decomposedAffineMatrix.value.scale.sy
+          )
         )
       );
     }
 
-    return mat;
-    return multiply(mat, perspectiveMatrix.value);
+    return Mat.multiply(mat, perspectiveMatrix.value);
   });
 
   const translatedMatrix = computed(() =>
-    multiply(matrixTranslate(props.x.value, props.y.value), finalMatrix.value)
+    Mat.multiply(Mat.translate(props.x.value, props.y.value), finalMatrix.value)
   );
 
   return {

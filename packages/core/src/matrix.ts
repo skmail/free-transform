@@ -1,7 +1,7 @@
 import { Tuple, LUP, Matrix, Point } from "./types";
 
 // @url https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.js
-export function lu(A: [[number]]): LUP {
+function lu(A: Array<number[]>): LUP {
   A = clone(A);
   const n = A.length;
   const n1 = n - 1;
@@ -50,7 +50,7 @@ export function lu(A: [[number]]): LUP {
   };
 }
 
-export function luSolve(lu: LUP, b: Tuple<number, 8>): Tuple<number, 8> {
+function luSolve(lu: LUP, b: number[]): Tuple<number, 8> {
   var LU = lu.LU;
   var n = LU.length;
   var x = clone(b);
@@ -83,7 +83,7 @@ export function luSolve(lu: LUP, b: Tuple<number, 8>): Tuple<number, 8> {
     x[i] /= LUi[i];
   }
 
-  return x;
+  return x as Tuple<number, 8>;
 }
 
 function clone<T>(a: T): T {
@@ -93,7 +93,7 @@ function clone<T>(a: T): T {
   return a;
 }
 
-export function identity(): Matrix {
+function identity(): Matrix {
   return [
     [1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -102,18 +102,19 @@ export function identity(): Matrix {
   ];
 }
 
-export function transpose(a: Matrix) {
+function transpose(a: Matrix) {
   return a[0].map((_, i) => a.map((y) => y[i]));
 }
 
-export function dotProduct(a: number[], b: number[]): number {
+function dotProduct(a: number[], b: number[]): number {
   return a.map((_, i) => a[i] * b[i]).reduce((m, n) => m + n);
 }
 
 function _multiply(a: Matrix, b: Matrix): Matrix {
   return a.map((x) => transpose(b).map((y) => dotProduct(x, y))) as Matrix;
 }
-export function multiply(...matrices: Matrix[]): Matrix {
+
+function multiply(...matrices: Matrix[]): Matrix {
   let result = identity();
 
   for (let matrix of matrices) {
@@ -123,23 +124,23 @@ export function multiply(...matrices: Matrix[]): Matrix {
   return result;
 }
 
-export function applyToPoint(matrix: Matrix, point: Point): Point {
+function applyToPoint(matrix: Matrix, point: Point): Point {
   const vector = getVector(matrix, point);
   return [vector[0] / vector[2], vector[1] / vector[2]];
 }
 
-export function applyToPoints(matrix: Matrix, points: Point[]): Point[] {
+function applyToPoints(matrix: Matrix, points: Point[]): Point[] {
   return points.map((point) => applyToPoint(matrix, point));
 }
 
-export function getVector(matrix: Matrix, point: Point = [0, 0]) {
+function getVector(matrix: Matrix, point: Point = [0, 0]) {
   const x = matrix[0][0] * point[0] + matrix[0][1] * point[1] + matrix[0][3];
   const y = matrix[1][0] * point[0] + matrix[1][1] * point[1] + matrix[1][3];
   const w = matrix[3][0] * point[0] + matrix[3][1] * point[1] + matrix[3][3];
   return [x, y, w];
 }
 
-export function matrixTranslate(tx: number, ty: number): Matrix {
+function matrixTranslate(tx: number, ty: number): Matrix {
   return [
     [1, 0, 0, tx],
     [0, 1, 0, ty],
@@ -148,7 +149,7 @@ export function matrixTranslate(tx: number, ty: number): Matrix {
   ];
 }
 
-export function matrixRotate(radians: number, origin?: Point) {
+function matrixRotate(radians: number, origin?: Point) {
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);
   const matrix: Matrix = [
@@ -169,7 +170,7 @@ export function matrixRotate(radians: number, origin?: Point) {
   );
 }
 
-export function matrixScale(sx: number, sy: number, origin?: Point) {
+function matrixScale(sx: number, sy: number, origin?: Point) {
   const matrix: Matrix = [
     [sx, 0, 0, 0],
     [0, sy, 0, 0],
@@ -187,7 +188,7 @@ export function matrixScale(sx: number, sy: number, origin?: Point) {
     matrixTranslate(-origin[0], -origin[1])
   );
 }
-export function createMatrixFromParams({
+function createFromParams({
   scaleX = 1,
   scaleY = 1,
   angle = 0,
@@ -203,7 +204,7 @@ export function createMatrixFromParams({
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/inverse.js
 // http://www.wolframalpha.com/input/?i=Inverse+%5B%7B%7Ba,c,e%7D,%7Bb,d,f%7D,%7B0,0,1%7D%7D%5D
 
-export function inverseAffine(matrix: Matrix): Matrix {
+function inverseAffine(matrix: Matrix): Matrix {
   const a = matrix[0][0];
   const b = matrix[0][1];
 
@@ -224,7 +225,7 @@ export function inverseAffine(matrix: Matrix): Matrix {
 }
 
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
-export function decompose(matrix: Matrix) {
+function decompose(matrix: Matrix) {
   const result = {
     scale: {
       sx: 0,
@@ -253,10 +254,30 @@ export function decompose(matrix: Matrix) {
   return result;
 }
 
-export function roundMatrix(matrix: Matrix, precision = 10000000000) {
+function roundMatrix(matrix: Matrix, precision = 10000000000) {
   return matrix.map((row) => row.map((value) => round(value, precision)));
 }
 
-export function round(value: number, precision = 10000000000) {
+function round(value: number, precision = 10000000000) {
   return Math.round(value * precision) / precision;
 }
+
+export const Mat = {
+  lu,
+  luSolve,
+  decompose,
+
+  identity,
+  transpose,
+  multiply,
+  toPoint: applyToPoint,
+  toPoints: applyToPoints,
+
+  rotate: matrixRotate,
+  scale: matrixScale,
+  translate: matrixTranslate,
+  inverse: inverseAffine,
+
+  round: roundMatrix,
+  fromParams: createFromParams,
+};

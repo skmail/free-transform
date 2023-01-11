@@ -7,7 +7,7 @@ export type Point = Tuple<number, 2>;
 export type Matrix = Tuple<Tuple<number, 4>, 4>;
 
 export interface LUP {
-  LU: [[number]];
+  LU: number[][];
   P: number[];
 }
 

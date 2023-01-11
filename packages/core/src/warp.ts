@@ -1,5 +1,5 @@
-import { getAngle, getPointAtAngle } from "./angle";
-import { decompose } from "./matrix";
+import { Mat } from "./matrix";
+import { Angle } from "./angle";
 import { Event, Matrix, Point, Tuple, WarpUpdatePayload } from "./types";
 import { getDistance } from "./utils";
 export const TRIANGLES = [
@@ -10,7 +10,7 @@ export const TRIANGLES = [
 ];
 
 function getTriangleRotation(pos1: Point, pos2: Point, pos3: Point) {
-  const radians = getAngle(pos1, pos3) - getAngle(pos1, pos2);
+  const radians = Angle.angle(pos1, pos3) - Angle.angle(pos1, pos2);
   return radians >= 0 ? radians : radians + 2 * Math.PI;
 }
 
@@ -54,7 +54,7 @@ export function warp(
   { matrix, warp, start }: WarpProps,
   onUpdate: (data: WarpUpdatePayload) => void
 ): (event: Event) => void {
-  const decomposed = decompose(matrix);
+  const decomposed = Mat.decompose(matrix);
   const radians = decomposed.rotation.angle;
 
   const nearestCount =
@@ -71,14 +71,14 @@ export function warp(
   return (event) => {
     const movePoint = [event.clientX, event.clientY];
 
-    let moveDiff = getPointAtAngle(
+    let moveDiff = Angle.point(
       [movePoint[0] - start[0], movePoint[1] - start[1]],
       -radians
     );
 
     moveDiff[0] /= decomposed.scale.sx;
     moveDiff[1] /= decomposed.scale.sy;
-    
+
     const newHandles = warp.map((handles, index) => {
       if (nearestHandles.includes(index)) {
         return [handles[0] + moveDiff[0], handles[1] + moveDiff[1]];

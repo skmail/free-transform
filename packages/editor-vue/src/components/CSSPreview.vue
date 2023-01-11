@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Matrix, Point, transpose, Tuple } from "@free-transform/core";
+import { Matrix, Point, Mat, Tuple } from "@free-transform/core";
 import { useValues } from "@free-transform/vue";
 import { computed } from "@vue/reactivity";
 import copy from "copy-to-clipboard";
@@ -71,7 +71,7 @@ const timeout = ref(0);
 
 const { translatedMatrix } = useValues(refs);
 const matrix3d = computed(() => {
-  const mat = transpose(translatedMatrix.value);
+  const mat = Mat.transpose(translatedMatrix.value);
   const string = mat.map((v) =>
     v.map((v) => Number(v.toFixed(props.precision)))
   );

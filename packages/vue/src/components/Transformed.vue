@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Matrix, Point, transpose, Tuple } from "@free-transform/core";
+import { Matrix, Point, Mat, Tuple } from "@free-transform/core";
 import { computed } from "@vue/reactivity";
 import { toRefs, ref, CSSProperties } from "vue";
 import { useValues } from "../hooks/useValues";
@@ -34,7 +34,7 @@ defineExpose({
   <div
     ref="content"
     :style="{
-      transform: `matrix3d(${transpose(translatedMatrix)})`,
+      transform: `matrix3d(${Mat.transpose(translatedMatrix)})`,
       userSelect: 'none',
       position: 'absolute',
       transformOrigin: '0 0',

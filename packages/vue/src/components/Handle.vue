@@ -1,11 +1,5 @@
 <script lang="ts" setup>
-import {
-  applyToPoint,
-  toDegree,
-  decompose,
-  Matrix,
-  getPointAtAngle,
-} from "@free-transform/core";
+import { Matrix, Mat, Angle } from "@free-transform/core";
 import { computed, inject, Ref } from "vue";
 
 export interface Props {
@@ -39,14 +33,14 @@ const transform = computed(() => {
     return "";
   }
 
-  const decomposed = decompose(affineMatrix.value);
+  const decomposed = Mat.decompose(affineMatrix.value);
 
-  const point1 = applyToPoint(matrix.value, [
+  const point1 = Mat.toPoint(matrix.value, [
     Math.floor(props.position[0]) * width.value,
     Math.floor(props.position[1]) * height.value,
   ]);
 
-  const point2 = applyToPoint(matrix.value, [
+  const point2 = Mat.toPoint(matrix.value, [
     Math.ceil(props.position[0]) * width.value,
     Math.ceil(props.position[1]) * height.value,
   ]);
@@ -62,11 +56,11 @@ const transform = computed(() => {
 
   const radians = decomposed.rotation.angle;
 
-  const [x, y] = getPointAtAngle([props.offset[0], props.offset[1]], radians);
+  const [x, y] = Angle.point([props.offset[0], props.offset[1]], radians);
 
-  return `translate(${point[0] + x}px, ${point[1] + y}px) rotate(${toDegree(
-    -radians
-  )}deg)`;
+  return `translate(${point[0] + x}px, ${
+    point[1] + y
+  }px) rotate(${Angle.degrees(-radians)}deg)`;
 });
 
 const onDown = (event: PointerEvent) => {
