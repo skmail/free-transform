@@ -1,16 +1,19 @@
 {
   "name": "@free-transform/react",
-  "version": "1.0.13",
+  "version": "1.0.16",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "scripts": {  
-    "lint": "TIMING=1 eslint \"**/*.ts*\"",
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+  "scripts": {
+    "dev": "npm run build -- --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "lint": "TIMING=1 eslint \"**/*.ts*\""
   },
   "dependencies": {
     "@free-transform/core": "*",
     "@free-transform/math": "*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "tsup": "^7.2.0"
   },
   "devDependencies": {

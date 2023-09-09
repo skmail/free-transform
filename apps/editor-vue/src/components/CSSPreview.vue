@@ -75,7 +75,6 @@ const matrix3d = computed(() => {
   const string = mat.map((v) =>
     v.map((v) => Number(v.toFixed(props.precision)))
   );
-
   return `matrix3d(${string})`;
 });
 

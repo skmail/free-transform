@@ -50,7 +50,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
 
       const box = minMax(points);
 
-      const margin = strokeWidth / 2;
+      const margin = 0;
 
       return {
         d: data.join(" "),
@@ -77,6 +77,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
           position: "absolute",
           left: svg.box.xmin + x,
           top: svg.box.ymin + y,
+          overflow:"visible"
         }}
         width={svg.width}
         height={svg.height}

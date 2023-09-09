@@ -68,6 +68,7 @@ export function scale(
       height * opposite[1],
     ]);
 
+  
     const newScale = [1, 1];
 
     if (scaleType[0] === 0 || scaleType[0] === 1) {

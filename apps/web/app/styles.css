@@ -3,23 +3,37 @@
   height: 400px;
   background-color: #f3f4f6;
   position: relative;
+  margin: 200px;
 }
 body {
   margin: 0;
 }
 .resize-handle {
-  --width: 8px;
-  --height: 8px;
+  --width: 35px;
+  --height: 35px;
   width: var(--width);
   height: var(--height);
   box-shadow: 0 0 0 2px #3b82f6, 0 0 0 3px white;
-
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
   background: white;
+}
+
+.faded {
+  opacity: 0.7;
+  
+}
+.resize-handle-x {
+  --width: 18px;
+  --height: 38px;
+}
+
+.resize-handle-y {
+  --height: 18px;
+  --width: 38px;
 }
 
 .rotate-handle {

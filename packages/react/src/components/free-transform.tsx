@@ -28,6 +28,7 @@ const Context = createContext<ContextType>({} as ContextType);
 
 export function FreeTransform({ children, ...rest }: PropsWithChildren<Props>) {
   const perspectiveMatrix = useMemo(() => {
+    
     return makePerspectiveMatrix(
       makeWarpPoints(rest.width, rest.height),
       rest.warp || makeWarpPoints(rest.width, rest.height)
@@ -36,8 +37,9 @@ export function FreeTransform({ children, ...rest }: PropsWithChildren<Props>) {
 
   const finalMatrix = useMemo(() => {
     return Mat.multiply(rest.matrix, perspectiveMatrix);
-  }, [rest.matrix, perspectiveMatrix]);
+  }, [perspectiveMatrix, rest.matrix]);
 
+  
   return (
     <Context.Provider
       value={{

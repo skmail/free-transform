@@ -1,4 +1,4 @@
-import { Point, Tuple } from "./types";
+import type { Point, Tuple } from "./types";
 
 export function makeWarpPoints(width: number, height: number): Tuple<Point, 4> {
   return [

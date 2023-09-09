@@ -51,7 +51,7 @@ interface WarpProps {
 
 export function warp(
   handle: Point,
-  { matrix, warp, start }: WarpProps,
+  { matrix, warp: warpPoints, start }: WarpProps,
   onUpdate: (data: WarpUpdatePayload) => void
 ): (event: Event) => void {
   const decomposed = Mat.decompose(matrix);
@@ -71,22 +71,22 @@ export function warp(
   return (event) => {
     const movePoint = [event.clientX, event.clientY];
 
-    let moveDiff = Angle.point(
+    const moveDiff = Angle.point(
       [movePoint[0] - start[0], movePoint[1] - start[1]],
       -radians
     );
 
-    moveDiff[0] /= decomposed.scale[0];
-    moveDiff[1] /= decomposed.scale[1];
+    // moveDiff[0] /= decomposed.scale[0];
+    // moveDiff[1] /= decomposed.scale[1];
 
-    const newHandles = warp.map((handles, index) => {
+    const newHandles = warpPoints.map((handles, index) => {
       if (nearestHandles.includes(index)) {
         return [handles[0] + moveDiff[0], handles[1] + moveDiff[1]];
       }
       return handles;
     }) as Tuple<Point, 4>;
 
-    if (isConvex(newHandles, warp)) {
+    if (isConvex(newHandles, warpPoints)) {
       return;
     }
 

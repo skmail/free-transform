@@ -22,6 +22,7 @@ import {
   warp,
 } from "@free-transform/core";
 import { assignRefs } from "../utils/assign-refs";
+import { Vec } from "@free-transform/math";
 
 type Props = {
   origin: Point;
@@ -67,19 +68,36 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
 
     const transform = useMemo(() => {
       const decomposed = Mat.decompose(matrix);
-      let radians = -decomposed.rotation;
+      let radians = decomposed.rotation;
 
       const point = Mat.toPoint(finalMatrix, [
         position[0] * width,
         position[1] * height,
       ]);
 
+      const pts = Mat.toPoints(finalMatrix, makeWarpPoints(width, height));
+      const dists = pts.map((p, index) => ({
+        distance: Vec.distance(p, point),
+        point: p,
+        index
+      }));
+
+      let min = dists[0]
+
+      for(let distance of dists){
+        if(distance.distance < min.distance){
+          min = distance
+        }
+      }
+ 
+      const a = (Angle.wrap(Angle.angle(point, min.point) %( Math.PI/ 2)) );
+      radians += a;
       const offsetPosition = Angle.point(
         [
           (handleOffset[0] - centerMargin[0]) * Math.sign(decomposed.scale[0]),
           (handleOffset[1] - centerMargin[1]) * Math.sign(decomposed.scale[1]),
         ],
-        -radians
+        radians
       );
 
       const final = [
@@ -99,10 +117,11 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
         scale(${scaleSign[0]}, ${scaleSign[1]})
         `,
         radians,
+        a,
+        min
       };
-    }, [matrix,finalMatrix, width, height, x, y, origin, type, centerMargin]);
+    }, [matrix, finalMatrix, width, height, x, y, origin, type, centerMargin]);
 
-    
     const handler = useCallback(
       (startEvent: ReactPointerEvent) => {
         switch (type) {
@@ -133,6 +152,7 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
                 affineMatrix: matrix,
                 x,
                 y,
+                offset,
               },
               onUpdate
             );
@@ -176,7 +196,9 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
           transformOrigin: "0 0",
           ...(props.style || {}),
         }}
-      />
+      >
+        {Angle.degrees(transform.a).toFixed(0)}/ {transform.min.index}
+      </div>
     );
   }
 );
