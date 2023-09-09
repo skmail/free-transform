@@ -23,11 +23,14 @@ export function scale(
     start,
     width,
     height,
-    fromCenter = () => false,
-    aspectRatio = () => false,
+
     matrix,
     affineMatrix = matrix,
-    perspectiveMatrix = matrix,
+    perspectiveMatrix = Mat.identity(),
+
+    fromCenter = () => false,
+    aspectRatio = () => false,
+
     scaleLimit,
   }: ScaleProps,
   onUpdate: (data: { matrix: Matrix }) => void
@@ -36,7 +39,7 @@ export function scale(
 
   const bounds = minMax(Mat.toPoints(matrix, makeWarpPoints(width, height)));
 
-  const radians = decomposed.rotation.angle;
+  const radians = decomposed.rotation;
 
   const startPoint = [start[0], start[1]];
 
@@ -52,8 +55,8 @@ export function scale(
       -radians
     );
 
-    moveDiff[0] /= decomposed.scale.sx;
-    moveDiff[1] /= decomposed.scale.sy;
+    moveDiff[0] /= decomposed.scale[0];
+    moveDiff[1] /= decomposed.scale[1];
 
     const px1 = Mat.toPoint(perspectiveMatrix, [
       width * scaleType[0],

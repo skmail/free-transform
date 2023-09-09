@@ -25,13 +25,13 @@ export function useValues(props: Props) {
 
   const width = computed(() =>
     props.disabledScale.value
-      ? props.width.value * decomposedAffineMatrix.value.scale.sx
+      ? props.width.value * decomposedAffineMatrix.value.scale[0]
       : props.width.value
   );
 
   const height = computed(() =>
     props.disabledScale.value
-      ? props.height.value * decomposedAffineMatrix.value.scale.sy
+      ? props.height.value * decomposedAffineMatrix.value.scale[1]
       : props.height.value
   );
 
@@ -41,8 +41,8 @@ export function useValues(props: Props) {
     }
     if (props.disabledScale.value) {
       return props.warp.value.map((point) => [
-        point[0] * decomposedAffineMatrix.value.scale.sx,
-        point[1] * decomposedAffineMatrix.value.scale.sy,
+        point[0] * decomposedAffineMatrix.value.scale[0],
+        point[1] * decomposedAffineMatrix.value.scale[1],
       ]) as Tuple<Point, 4>;
     }
     return props.warp.value;
@@ -57,13 +57,14 @@ export function useValues(props: Props) {
 
   const finalMatrix = computed(() => {
     let mat = props.matrix.value;
+ 
     if (props.disabledScale.value) {
       mat = Mat.multiply(
         props.matrix.value,
         Mat.inverse(
           Mat.scale(
-            decomposedAffineMatrix.value.scale.sx,
-            decomposedAffineMatrix.value.scale.sy
+            decomposedAffineMatrix.value.scale[0],
+            decomposedAffineMatrix.value.scale[1]
           )
         )
       );

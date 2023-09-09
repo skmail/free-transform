@@ -45,6 +45,7 @@ const transform = computed(() => {
     Math.ceil(props.position[1]) * height.value,
   ]);
 
+  
   const find = (p1: number, p2: number, per: number) => p1 + (p2 - p1) * per;
 
   const percentage = Math.abs(props.position[0] - props.position[1]);
@@ -54,10 +55,14 @@ const transform = computed(() => {
     find(point1[1], point2[1], percentage),
   ];
 
-  const radians = decomposed.rotation.angle;
+  const radians = decomposed.rotation;
 
   const [x, y] = Angle.point([props.offset[0], props.offset[1]], radians);
 
+
+  console.log(
+    point
+  )
   return `translate(${point[0] + x}px, ${
     point[1] + y
   }px) rotate(${Angle.degrees(-radians)}deg)`;
@@ -66,6 +71,8 @@ const transform = computed(() => {
 const onDown = (event: PointerEvent) => {
   handlers[props.type]?.(props.origin || props.position, event);
 };
+
+console.log
 </script>
 
 <template>

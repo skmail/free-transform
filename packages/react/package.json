@@ -1,0 +1,22 @@
+{
+  "name": "@free-transform/react",
+  "version": "1.0.13",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {  
+    "lint": "TIMING=1 eslint \"**/*.ts*\"",
+    "build": "tsup src/index.ts --format cjs,esm --dts"
+  },
+  "dependencies": {
+    "@free-transform/core": "*",
+    "@free-transform/math": "*",
+    "tsup": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.22",
+    "@types/react-dom": "^18.0.7",
+    "eslint-config-custom": "*",
+    "tsconfig": "*"
+  }
+}

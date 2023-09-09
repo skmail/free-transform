@@ -1,0 +1,1 @@
+module.exports = require("@kitly/config/jest.config")

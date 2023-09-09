@@ -227,29 +227,76 @@ function inverseAffine(matrix: Matrix): Matrix {
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
 function decompose(matrix: Matrix) {
   const result = {
-    scale: {
-      sx: 0,
-      sy: 0,
-    },
-    rotation: {
-      angle: 0,
-    },
+    scale: [1, 1],
+    rotation: 0,
+    translate: [0, 0]
   };
   const [[sx, rx], [ry, sy]] = matrix;
 
   if (sx !== 0 || ry !== 0) {
     const hypotAc = Math.hypot(sx, ry);
-    result.scale.sx = hypotAc;
-    result.scale.sy = (sx * sy - rx * ry) / hypotAc;
+    result.scale[0] = hypotAc;
+    result.scale[1] = (sx * sy - rx * ry) / hypotAc;
     const acos = Math.acos(sx / hypotAc);
-    result.rotation.angle = ry > 0 ? -acos : acos;
+    result.rotation = ry > 0 ? -acos : acos;
   } else if (rx !== 0 || sy !== 0) {
     const hypotBd = Math.hypot(rx, sy);
-    result.scale.sx = (sx * sy - rx * ry) / hypotBd;
-    result.scale.sy = hypotBd;
+    result.scale[0] = (sx * sy - rx * ry) / hypotBd;
+    result.scale[1] = hypotBd;
     const acos = Math.acos(ry / hypotBd);
-    result.rotation.angle = Math.PI / 2 + (sy > 0 ? -acos : acos);
+    result.rotation = Math.PI / 2 + (sy > 0 ? -acos : acos);
   }
+
+  result.translate[0] = matrix[0][3]
+  result.translate[1] = matrix[1][3]
+  
+  // console.log(result.scale, decompose2(matrix).scale);
+  return result
+  // return decompose2(matrix);
+}
+
+// @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
+function decompose2(matrix: Matrix) {
+  const result = {
+    scale: [1, 1],
+    rotation: 0,
+    translate: [0, 0],
+    skew: [0, 0],
+  };
+
+  let m11 = matrix[0][0];
+  let m21 = matrix[1][0];
+  let m12 = matrix[0][1];
+  let m22 = matrix[1][1];
+
+  let determinant = m11 * m22 - m12 * m21;
+  if (determinant == 0) return result;
+
+  result.translate[0] = matrix[0][3];
+  result.translate[1] = matrix[1][3];
+
+  if (determinant < 0) {
+    if (m11 < m22) {
+      result.scale[0] *= -1;
+    } else {
+      result.scale[1] *= -1;
+    }
+  }
+
+  result.scale[0] *= Math.sqrt(m11 * m11 + m12 * m12);
+  m11 /= result.scale[0];
+  m12 /= result.scale[0];
+
+  let scaledShear = m11 * m21 + m12 * m22;
+  m21 -= m11 * scaledShear;
+  m22 -= m12 * scaledShear;
+
+  result.scale[1] *= Math.sqrt(m21 * m21 + m22 * m22);
+  m21 /= result.scale[1];
+  m22 /= result.scale[1];
+  result.skew[0] = scaledShear / result.scale[1];
+
+  result.rotation = Math.atan2(m12, m11);
 
   return result;
 }

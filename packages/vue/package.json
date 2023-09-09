@@ -1,17 +1,14 @@
 {
   "name": "@free-transform/vue",
   "version": "1.0.13",
-  "main": "dist/vue.umd.js",
-  "unpkg": "dist/vue.iife.js",
-  "jsdelivr": "dist/vue.iife.js",
-  "module": "./dist/vue.mjs",
-  "types": "./dist/types/index.d.ts",
+  "type": "module",
+  "main": "./src/index.ts",
   "scripts": {
     "build": "vue-tsc --noEmit && vite build && vue-tsc --declaration --emitDeclarationOnly  --noEmit false --outDir dist/types ",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@free-transform/core": "^1.0.13",
+    "@free-transform/core": "*",
     "vue": "^3.2.37"
   },
   "devDependencies": {

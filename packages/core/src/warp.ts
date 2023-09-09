@@ -55,7 +55,7 @@ export function warp(
   onUpdate: (data: WarpUpdatePayload) => void
 ): (event: Event) => void {
   const decomposed = Mat.decompose(matrix);
-  const radians = decomposed.rotation.angle;
+  const radians = decomposed.rotation;
 
   const nearestCount =
     (handle[0] === 0 || handle[0] === 1) && (handle[1] === 0 || handle[1] === 1)
@@ -76,8 +76,8 @@ export function warp(
       -radians
     );
 
-    moveDiff[0] /= decomposed.scale.sx;
-    moveDiff[1] /= decomposed.scale.sy;
+    moveDiff[0] /= decomposed.scale[0];
+    moveDiff[1] /= decomposed.scale[1];
 
     const newHandles = warp.map((handles, index) => {
       if (nearestHandles.includes(index)) {

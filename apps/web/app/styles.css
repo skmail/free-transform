@@ -1,0 +1,45 @@
+.workspace {
+  width: 400px;
+  height: 400px;
+  background-color: #f3f4f6;
+  position: relative;
+}
+body {
+  margin: 0;
+}
+.resize-handle {
+  --width: 8px;
+  --height: 8px;
+  width: var(--width);
+  height: var(--height);
+  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 3px white;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background: white;
+}
+
+.rotate-handle {
+  width: 15px;
+  height: 15px;
+  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 3px white;
+
+  background-color: white;
+
+  cursor: pointer;
+  border-radius: 100px;
+}
+
+.rotation-line {
+  position: absolute;
+  height: 24px;
+  margin-top: 15px;
+  width: 1px;
+  background-color: red;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}

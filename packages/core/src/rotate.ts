@@ -12,7 +12,7 @@ import { value } from "./utils";
 
 interface RotateProps {
   start: Point;
-  offset: Point;
+  offset?: Point;
 
   x: number;
   y: number;
@@ -21,8 +21,8 @@ interface RotateProps {
   matrix: Matrix;
   affineMatrix?: Matrix;
 
-  snap: EventValidator<Event>;
-  snapDegree: number;
+  snap?: EventValidator<Event>;
+  snapDegree?: number;
 }
 
 export function rotate(
@@ -33,7 +33,7 @@ export function rotate(
     width,
     height,
     start,
-    offset,
+    offset = [0, 0],
     matrix,
     affineMatrix = matrix,
     snapDegree = 15,
@@ -43,7 +43,7 @@ export function rotate(
 ): (event: Event) => void {
   const decomposed = Mat.decompose(affineMatrix);
 
-  const rotation = decomposed.rotation.angle;
+  const rotation = decomposed.rotation;
 
   const absoluteHandle = Mat.toPoint(matrix, [
     width * handle[0],

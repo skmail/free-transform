@@ -1,28 +1,28 @@
 {
-  "name": "free-transform-lerna",
+  "name": "free-transform",
   "version": "1.0.1",
   "description": "",
   "scripts": {
-    "bootstrap": "npx lerna bootstrap",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "demo:vue": "npm run dev --prefix ./packages/editor-vue",
-    "build:core": "npm run build --prefix ./packages/core",
-    "build:vue": "npm run build --prefix ./packages/vue",
-    "build:demo:vue": "npm run build:packages && npm run build --prefix ./packages/editor-vue",
-    "build:packages": "npm run build:core && npm run build:vue",
-    "packages:publish": "npm run build:packages && lerna publish",
-    "start:demo:vue": "npm run build:packages && npm run dev --prefix ./packages/editor-vue",
-    "test:watch": "lerna run test:watch"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "publish-packages": "turbo run build && changeset version && changeset publish",
+    "changeset": "changeset"
   },
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "devDependencies": {
-    "lerna": "^5.4.3"
+    "@babel/types": "^7.20.7",
+    "tsconfig": "*",
+    "turbo": "^1.10.13"
   },
   "dependencies": {
-    "@babel/types": "^7.20.7"
+    "@changesets/cli": "^2.26.2",
+    "eslint": "^8.49.0"
   }
 }
