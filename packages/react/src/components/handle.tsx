@@ -7,7 +7,6 @@ import {
   useRef,
   useLayoutEffect,
   useState,
-  useEffect,
 } from "react";
 import { useFreeTransform } from "./free-transform";
 import {
@@ -21,8 +20,7 @@ import {
   scale,
   warp,
 } from "@free-transform/core";
-import { assignRefs } from "../utils/assign-refs";
-import { Vec } from "@free-transform/math";
+import { assignRefs } from "../utils/assign-refs"; 
 
 type Props = {
   origin: Point;
@@ -75,23 +73,6 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
         position[1] * height,
       ]);
 
-      const pts = Mat.toPoints(finalMatrix, makeWarpPoints(width, height));
-      const dists = pts.map((p, index) => ({
-        distance: Vec.distance(p, point),
-        point: p,
-        index
-      }));
-
-      let min = dists[0]
-
-      for(let distance of dists){
-        if(distance.distance < min.distance){
-          min = distance
-        }
-      }
- 
-      const a = (Angle.wrap(Angle.angle(point, min.point) %( Math.PI/ 2)) );
-      radians += a;
       const offsetPosition = Angle.point(
         [
           (handleOffset[0] - centerMargin[0]) * Math.sign(decomposed.scale[0]),
@@ -113,12 +94,10 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
       return {
         style: `
         translate(${final[0]}px, ${final[1]}px)        
-        rotate(${radians}rad)
+        rotate(${-radians}rad)
         scale(${scaleSign[0]}, ${scaleSign[1]})
         `,
         radians,
-        a,
-        min
       };
     }, [matrix, finalMatrix, width, height, x, y, origin, type, centerMargin]);
 
@@ -196,9 +175,7 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
           transformOrigin: "0 0",
           ...(props.style || {}),
         }}
-      >
-        {Angle.degrees(transform.a).toFixed(0)}/ {transform.min.index}
-      </div>
+      />
     );
   }
 );
