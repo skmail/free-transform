@@ -1,6 +1,5 @@
 .workspace {
-  width: 400px;
-  height: 400px;
+
   background-color: #f3f4f6;
   position: relative;
   margin: 200px;
@@ -9,8 +8,8 @@ body {
   margin: 0;
 }
 .resize-handle {
-  --width: 35px;
-  --height: 35px;
+  --width: 12px;
+  --height: 12px;
   width: var(--width);
   height: var(--height);
   box-shadow: 0 0 0 2px #3b82f6, 0 0 0 3px white;
@@ -27,12 +26,12 @@ body {
   
 }
 .resize-handle-x {
-  --width: 18px;
+  --width: 14px;
   --height: 38px;
 }
 
 .resize-handle-y {
-  --height: 18px;
+  --height: 14px;
   --width: 38px;
 }
 

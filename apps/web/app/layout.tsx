@@ -6,7 +6,9 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className="dark">{children}</body>
+      <body className="dark" style={{
+        overflow:"hidden"
+      }}>{children}</body>
     </html>
   );
 }

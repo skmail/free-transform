@@ -1,12 +1,4 @@
-import {
-  Mat,
-  Matrix,
-  Point,
-  makeWarpPoints,
-  minMax,
-  snapTranslation,
-  translate,
-} from "@free-transform/core";
+import { Mat, Matrix, minMax, translate } from "@free-transform/core";
 import { ComponentProps, forwardRef, useMemo } from "react";
 import { useFreeTransform } from "./free-transform";
 
@@ -26,36 +18,15 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
     },
     ref
   ) {
-    const {
-      height,
-      width,
-      matrix,
-      x,
-      y,
-      onUpdate,
-      rotationMatrix,
-      decomposedMatrix,
-      perspectiveMatrix,
-      snap,
-      onSnap,
-    } = useFreeTransform();
-
-    const matrix3d = useMemo(() => {
-      const matrix3d = Mat.transpose(rotationMatrix);
-      return `matrix3d(${matrix3d})`;
-    }, [rotationMatrix]);
+    const { height, width, finalMatrix, x, y, onUpdate } = useFreeTransform();
 
     const svg = useMemo(() => {
-      const scaleMatrix = Mat.multiply(
-        Mat.scale(...decomposedMatrix.scale),
-        perspectiveMatrix
-      );
-      const points: Point[] = Mat.toPoints(scaleMatrix, [
+      const points = Mat.toPoints(finalMatrix, [
         [0, 0],
         [0, height],
         [width, height],
         [width, 0],
-      ]).map((p) => [Math.abs(p[0]), Math.abs(p[1])]);
+      ]);
 
       const data = points.map((point, i) => {
         const data = [];
@@ -73,16 +44,16 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
       const count = Math.max(0, lines) + 1;
       const h = height / count;
       for (let i = h; i < height; i += h) {
-        const p = Mat.toPoint(scaleMatrix, [0, i]);
-        const p2 = Mat.toPoint(scaleMatrix, [width, i]);
+        const p = Mat.toPoint(finalMatrix, [0, i]);
+        const p2 = Mat.toPoint(finalMatrix, [width, i]);
         data.push(`M ${p[0]} ${p[1]}`);
         data.push(`L ${p2[0]} ${p2[1]}`);
       }
 
       const w = width / count;
       for (let i = w; i < width; i += w) {
-        const p = Mat.toPoint(scaleMatrix, [i, 0]);
-        const p2 = Mat.toPoint(scaleMatrix, [i, height]);
+        const p = Mat.toPoint(finalMatrix, [i, 0]);
+        const p2 = Mat.toPoint(finalMatrix, [i, height]);
         data.push(`M ${p[0]} ${p[1]}`);
         data.push(`L ${p2[0]} ${p2[1]}`);
       }
@@ -104,14 +75,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
           xmin: box.xmin,
         },
       };
-    }, [
-      height,
-      lines,
-      decomposedMatrix,
-      perspectiveMatrix,
-      strokeWidth,
-      width,
-    ]);
+    }, [height, lines, finalMatrix, strokeWidth, width]);
 
     return (
       <svg
@@ -124,8 +88,6 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
           left: svg.box.xmin + x,
           top: svg.box.ymin + y,
           overflow: "visible",
-          transform: matrix3d,
-          transformOrigin: "0 0",
         }}
         width={svg.width}
         height={svg.height}
@@ -144,28 +106,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
               x,
               y,
             },
-            (changes) => {
-              if (snap) {
-                changes = {
-                  ...changes,
-                  ...snapTranslation({
-                    onSnap,
-                    matrix: matrix,
-                    points: snap,
-                    x,
-                    y,
-                    width,
-                    height,
-                    origin: Mat.toPoints(
-                      matrix,
-                      makeWarpPoints(width, height)
-                    ),
-                  }),
-                };
-              }
-
-              onUpdate(changes);
-            }
+            onUpdate
           );
 
           const onMouseUp = (event: PointerEvent) => {

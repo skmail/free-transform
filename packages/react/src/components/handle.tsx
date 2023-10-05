@@ -3,30 +3,37 @@ import {
   forwardRef,
   useCallback,
   useMemo,
-  PointerEvent as ReactPointerEvent,
   useRef,
-  useLayoutEffect,
-  useState,
 } from "react";
 import { useFreeTransform } from "./free-transform";
 import {
   Angle,
   Mat,
-  Matrix,
   Point,
-  makePerspectiveMatrix,
   makeWarpPoints,
   rotate,
   scale,
+  snapScale,
   warp,
 } from "@free-transform/core";
-import { assignRefs } from "../utils/assign-refs"; 
+import { assignRefs } from "../utils/assign-refs";
 
+type MoveEventPayload = { clientX: number; clientY: number };
 type Props = {
   origin: Point;
   position?: Point;
-  type: "rotate" | "scale" | "warp";
+  type: "rotate" | "scale" | "resize" | "warp";
   offset?: Point;
+  scaleLimit?: Point;
+  onStart?: (event: any) => void;
+  onMove?: (
+    event: MoveEventPayload,
+    prevEvent: MoveEventPayload
+  ) => void | {
+    startEvent: Partial<MoveEventPayload>;
+    moveEvent: Partial<MoveEventPayload>;
+  };
+  onEnd?: (event: any) => void;
 };
 export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
   function Handle(
@@ -35,20 +42,15 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
       type,
       position = origin,
       offset: handleOffset = [0, 0],
+      scaleLimit,
+      onStart,
+      onMove,
+      onEnd,
       ...props
     },
     ref
   ) {
-    const rref = useRef<HTMLDivElement>(null);
-
-    useLayoutEffect(() => {
-      if (!rref.current) {
-        return;
-      }
-      const box = rref.current.getBoundingClientRect();
-      setCenterMargin([box.width / 2, box.height / 2]);
-    }, []);
-
+ 
     const {
       matrix,
       width,
@@ -60,9 +62,9 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
       warp: warpPonts,
       perspectiveMatrix,
       finalMatrix,
+      snap,
+      onSnap
     } = useFreeTransform();
-
-    const [centerMargin, setCenterMargin] = useState<Point>([0, 0]);
 
     const transform = useMemo(() => {
       const decomposed = Mat.decompose(matrix);
@@ -75,8 +77,8 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
 
       const offsetPosition = Angle.point(
         [
-          (handleOffset[0] - centerMargin[0]) * Math.sign(decomposed.scale[0]),
-          (handleOffset[1] - centerMargin[1]) * Math.sign(decomposed.scale[1]),
+          handleOffset[0] * Math.sign(decomposed.scale[0]),
+          handleOffset[1] * Math.sign(decomposed.scale[1]),
         ],
         radians
       );
@@ -99,12 +101,13 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
         `,
         radians,
       };
-    }, [matrix, finalMatrix, width, height, x, y, origin, type, centerMargin]);
+    }, [matrix, finalMatrix, width, height, x, y, origin, type]);
 
     const handler = useCallback(
-      (startEvent: ReactPointerEvent) => {
+      (startEvent: MoveEventPayload) => {
         switch (type) {
           case "scale":
+          case "resize":
             return scale(
               origin,
               {
@@ -114,11 +117,67 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
                 matrix: finalMatrix,
                 affineMatrix: matrix,
                 perspectiveMatrix,
-                // scaleLimit: [0.1, Infinity],
                 fromCenter: (event: any) => event.altKey,
                 aspectRatio: (event: any) => event.shiftKey,
               },
-              onUpdate
+              (changes) => {
+                if (snap) {
+                  changes = {
+                    ...changes,
+                    matrix: snapScale({
+                      onSnap,
+                      matrix: changes.matrix,
+                      points: snap,
+                      x,
+                      y,
+                      width,
+                      height,
+                      origin,
+                    }),
+                  };
+                }
+
+                if (type === "scale") {
+                  onUpdate(changes);
+                  return;
+                }
+
+                const dec = Mat.decompose(changes.matrix);
+                const rotationMatrix = Mat.multiply(
+                  changes.matrix,
+                  Mat.inverse(
+                    Mat.scale(
+                      dec.scale[0] * Math.sign(dec.scale[0]),
+                      dec.scale[1] * Math.sign(dec.scale[1])
+                    )
+                  )
+                );
+                onUpdate({
+                  width: Math.abs(width * dec.scale[0]),
+                  height: Math.abs(height * dec.scale[1]),
+                  matrix: rotationMatrix,
+                });
+
+                // const rotationMatrix = Mat.multiply(
+                //   changes.matrix,
+                //   Mat.inverse(
+                //     Mat.scale(
+                //       dec.scale[0] * Math.sign(dec.scale[0]),
+                //       dec.scale[1] * Math.sign(dec.scale[1])
+                //     )
+                //   ),
+                //   Mat.scale(dec0.scale[0], dec0.scale[1])
+                // );
+                // onUpdate({
+                //   width: Math.abs(
+                //     width + width * ((dec.scale[0] - dec0.scale[0]) / 2)
+                //   ),
+                //   height: Math.abs(
+                //     height + height * ((dec.scale[1] - dec0.scale[1]) / 2)
+                //   ),
+                //   matrix: rotationMatrix,
+                // });
+              }
             );
           case "rotate":
             return rotate(
@@ -148,20 +207,33 @@ export const Handle = forwardRef<HTMLDivElement, ComponentProps<"div"> & Props>(
             );
         }
       },
-      [width, height, matrix, origin, type]
+      [
+        width,
+        height,
+        matrix,
+        origin,
+        type,
+        warpPonts,
+        perspectiveMatrix,
+        finalMatrix,
+      ]
     );
 
     return (
       <div
-        ref={assignRefs(ref, rref)}
+        ref={assignRefs(ref)}
         {...props}
         onPointerDown={(startEvent) => {
           startEvent.preventDefault();
           startEvent.stopPropagation();
-
-          const onDrag = handler(startEvent);
+          onStart && onStart(startEvent);
+          let moveHandler = handler(startEvent);
+          const onDrag = (event: MouseEvent) => {
+            moveHandler(event);
+          };
 
           const onMouseUp = (event: PointerEvent) => {
+            onEnd && onEnd(event);
             document.removeEventListener("pointermove", onDrag);
             document.removeEventListener("pointerup", onMouseUp);
           };

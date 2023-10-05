@@ -6,7 +6,8 @@ export { minMax } from "./minMax";
 
 export { makePerspectiveMatrix } from "./makePerspectiveMatrix";
 export { makeWarpPoints } from "./makeWarpPoints";
-
+export * from "./snap-scale"
+export * from "./snap-translation"
 export * from "./matrix";
 export * from "./angle";
 export * from "./types";

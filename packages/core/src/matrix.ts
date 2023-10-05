@@ -1,4 +1,4 @@
-import { Tuple, LUP, Matrix, Point } from "./types";
+import type { Tuple, LUP, Matrix, Point, DecomposedMatrix } from "./types";
 
 // @url https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.js
 function lu(A: Array<number[]>): LUP {
@@ -20,7 +20,7 @@ function lu(A: Array<number[]>): LUP {
     }
     P[k] = Pk;
 
-    if (Pk != k) {
+    if (Pk !== k) {
       A[k] = A[Pk];
       A[Pk] = Ak;
       Ak = A[k];
@@ -50,11 +50,12 @@ function lu(A: Array<number[]>): LUP {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-shadow
 function luSolve(lu: LUP, b: number[]): Tuple<number, 8> {
-  var LU = lu.LU;
-  var n = LU.length;
-  var x = clone(b);
-  var P = lu.P;
+  let LU = lu.LU;
+  let n = LU.length;
+  let x = clone(b);
+  let P = lu.P;
 
   for (let i = n - 1; i !== -1; --i) {
     x[i] = b[i];
@@ -86,9 +87,9 @@ function luSolve(lu: LUP, b: number[]): Tuple<number, 8> {
   return x as Tuple<number, 8>;
 }
 
-function clone<T>(a: T): T {
+function clone<T = unknown>(a: T): T {
   if (Array.isArray(a)) {
-    return a.map((a) => clone(a)) as T;
+    return a.map((item) => clone(item as T)) as T;
   }
   return a;
 }
@@ -225,11 +226,11 @@ function inverseAffine(matrix: Matrix): Matrix {
 }
 
 // @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
-function decompose(matrix: Matrix) {
-  const result = {
+function decompose(matrix: Matrix): DecomposedMatrix {
+  const result: DecomposedMatrix = {
     scale: [1, 1],
     rotation: 0,
-    translate: [0, 0]
+    translate: [0, 0],
   };
   const [[sx, rx], [ry, sy]] = matrix;
 
@@ -247,56 +248,8 @@ function decompose(matrix: Matrix) {
     result.rotation = Math.PI / 2 + (sy > 0 ? -acos : acos);
   }
 
-  result.translate[0] = matrix[0][3]
-  result.translate[1] = matrix[1][3]
-  
-  // console.log(result.scale, decompose2(matrix).scale);
-  return result
-  // return decompose2(matrix);
-}
-
-// @url https://github.com/chrvadala/transformation-matrix/blob/main/src/decompose.js
-function decompose2(matrix: Matrix) {
-  const result = {
-    scale: [1, 1],
-    rotation: 0,
-    translate: [0, 0],
-    skew: [0, 0],
-  };
-
-  let m11 = matrix[0][0];
-  let m21 = matrix[1][0];
-  let m12 = matrix[0][1];
-  let m22 = matrix[1][1];
-
-  let determinant = m11 * m22 - m12 * m21;
-  if (determinant == 0) return result;
-
   result.translate[0] = matrix[0][3];
   result.translate[1] = matrix[1][3];
-
-  if (determinant < 0) {
-    if (m11 < m22) {
-      result.scale[0] *= -1;
-    } else {
-      result.scale[1] *= -1;
-    }
-  }
-
-  result.scale[0] *= Math.sqrt(m11 * m11 + m12 * m12);
-  m11 /= result.scale[0];
-  m12 /= result.scale[0];
-
-  let scaledShear = m11 * m21 + m12 * m22;
-  m21 -= m11 * scaledShear;
-  m22 -= m12 * scaledShear;
-
-  result.scale[1] *= Math.sqrt(m21 * m21 + m22 * m22);
-  m21 /= result.scale[1];
-  m22 /= result.scale[1];
-  result.skew[0] = scaledShear / result.scale[1];
-
-  result.rotation = Math.atan2(m12, m11);
 
   return result;
 }

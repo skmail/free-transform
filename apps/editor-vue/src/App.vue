@@ -137,14 +137,14 @@ const workspace = ref<Workspace>({
 
 const mode = ref<"scale" | "warp">("scale");
 const handles = ref<[number, number, number, number][]>([
-  // [0, 0, -20, -20],
-  // [0, 1, -20, 20],
+  [0, 0, -20, -20],
+  [0, 1, -20, 20],
   [1, 0, 20, -20],
-  // [1, 1, 20, 20],
-  // [0.5, 0, 0, -20],
-  // [0, 0.5, -20, 0],
-  // [1, 0.5, 20, 0],
-  // [0.5, 1, 0, 20],
+  [1, 1, 20, 20],
+  [0.5, 0, 0, -20],
+  [0, 0.5, -20, 0],
+  [1, 0.5, 20, 0],
+  [0.5, 1, 0, 20],
 ]);
 
 const refs = shallowRef<Record<string, any>>({});

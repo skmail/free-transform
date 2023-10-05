@@ -1,0 +1,30 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@free-transform/editor-vue": "1.0.16",
+    "web": "1.0.0",
+    "@free-transform/core": "1.1.0",
+    "eslint-config-custom": "0.0.0",
+    "@free-transform/math": "1.0.16",
+    "@free-transform/react": "1.1.0",
+    "tsconfig": "0.0.0",
+    "@free-transform/vue": "1.0.16"
+  },
+  "changesets": [
+    "dull-pens-punch",
+    "fast-apes-beg",
+    "fifty-pants-join",
+    "gorgeous-timers-fetch",
+    "healthy-frogs-type",
+    "khaki-moose-sleep",
+    "large-pots-battle",
+    "mighty-colts-cheer",
+    "plenty-houses-joke",
+    "shiny-cherries-speak",
+    "shiny-jokes-rest",
+    "spotty-tigers-kick",
+    "wet-peas-return",
+    "wise-cycles-jog"
+  ]
+}

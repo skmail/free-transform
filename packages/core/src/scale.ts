@@ -2,7 +2,7 @@ import { Mat } from "./matrix";
 import { Angle } from "./angle";
 import { minMax } from "./minMax";
 import { makeWarpPoints } from "./makeWarpPoints";
-import { Event, EventValidator, Matrix, Point } from "./types";
+import type { Event, EventValidator, Matrix, Point } from "./types";
 import { clamp, value } from "./utils";
 
 interface ScaleProps {
@@ -12,9 +12,8 @@ interface ScaleProps {
   matrix: Matrix;
   affineMatrix?: Matrix;
   perspectiveMatrix?: Matrix;
-
-  fromCenter?: EventValidator<Event>;
-  aspectRatio?: EventValidator<Event>;
+  fromCenter?: EventValidator;
+  aspectRatio?: EventValidator;
   scaleLimit?: [number, number];
 }
 export function scale(
@@ -28,12 +27,12 @@ export function scale(
     affineMatrix = matrix,
     perspectiveMatrix = Mat.identity(),
 
-    fromCenter = () => false,
-    aspectRatio = () => false,
+    fromCenter = (): boolean => false,
+    aspectRatio = (): boolean => false,
 
     scaleLimit,
   }: ScaleProps,
-  onUpdate: (data: { matrix: Matrix }) => void
+  onUpdate?: (data: { matrix: Matrix }, { scale }: { scale: Point }) => void
 ): (event: Event) => void {
   const decomposed = Mat.decompose(affineMatrix);
 
@@ -50,7 +49,7 @@ export function scale(
 
     const movePoint: Point = [event.clientX, event.clientY];
 
-    let moveDiff = Angle.point(
+    const moveDiff = Angle.point(
       [movePoint[0] - startPoint[0], movePoint[1] - startPoint[1]],
       -radians
     );
@@ -68,8 +67,7 @@ export function scale(
       height * opposite[1],
     ]);
 
-  
-    const newScale = [1, 1];
+    const newScale: Point = [1, 1];
 
     if (scaleType[0] === 0 || scaleType[0] === 1) {
       newScale[0] = (px1[0] + moveDiff[0] - px2[0]) / (px1[0] - px2[0]);
@@ -100,12 +98,15 @@ export function scale(
       newScale[0] = clamp(newScale[0], scaleLimit[0], scaleLimit[1]);
       newScale[1] = clamp(newScale[1], scaleLimit[0], scaleLimit[1]);
     }
-
-    onUpdate({
+    const result = {
       matrix: Mat.multiply(
         affineMatrix,
         Mat.scale(newScale[0], newScale[1], absoluteOrigin)
       ),
-    });
+    };
+
+    onUpdate?.(result, { scale: newScale });
+
+    return result;
   };
 }

@@ -42,4 +42,35 @@ export type UpdatePayload =
 
 export type EventCallback<T extends Event, R = void> = (event: T) => R;
 
-export type EventValidator<T extends Event = Event> = ((event: T) => boolean) | boolean;
+export type EventValidator<T extends Event = Event> =
+  | ((event: T) => boolean)
+  | boolean;
+
+export interface DecomposedMatrix {
+  scale: Point;
+  rotation: number;
+  translate: Point;
+}
+
+export interface SnapPoint {
+  x?: number;
+  y?: number;
+  data?: unknown;
+}
+export type SnapPoints =
+  | SnapPoint[]
+  | ((data: {
+      matrix: Matrix;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    }) => SnapPoint[]);
+
+export interface SnapResult {
+  from: Point;
+  to: Point;
+  direction: "vertical" | "horizontal";
+  data: unknown;
+}
+export type OnSnap = (points: SnapResult[]) => void;
