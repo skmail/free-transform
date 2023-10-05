@@ -36,26 +36,25 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
       rotationMatrix,
       decomposedMatrix,
       perspectiveMatrix,
+      finalMatrix,
       snap,
       onSnap,
     } = useFreeTransform();
 
     const matrix3d = useMemo(() => {
-      const matrix3d = Mat.transpose(rotationMatrix);
+      const matrix3d = Mat.transpose(finalMatrix);
       return `matrix3d(${matrix3d})`;
     }, [rotationMatrix]);
 
     const svg = useMemo(() => {
-      const scaleMatrix = Mat.multiply(
-        Mat.scale(...decomposedMatrix.scale),
-        perspectiveMatrix
-      );
+      const scaleMatrix = finalMatrix;
       const points: Point[] = Mat.toPoints(scaleMatrix, [
         [0, 0],
         [0, height],
         [width, height],
         [width, 0],
-      ]).map((p) => [Math.abs(p[0]), Math.abs(p[1])]);
+      ]);
+      // .map((p) => [Math.abs(p[0]), Math.abs(p[1])]);
 
       const data = points.map((point, i) => {
         const data = [];
@@ -124,7 +123,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
           left: svg.box.xmin + x,
           top: svg.box.ymin + y,
           overflow: "visible",
-          transform: matrix3d,
+
           transformOrigin: "0 0",
         }}
         width={svg.width}
@@ -156,10 +155,7 @@ export const Grid = forwardRef<SVGSVGElement, ComponentProps<"svg"> & Props>(
                     y,
                     width,
                     height,
-                    origin: Mat.toPoints(
-                      matrix,
-                      makeWarpPoints(width, height)
-                    ),
+                    origin: Mat.toPoints(matrix, makeWarpPoints(width, height)),
                   }),
                 };
               }

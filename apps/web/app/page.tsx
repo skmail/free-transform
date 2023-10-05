@@ -91,9 +91,8 @@ export default function Page() {
   );
 
   const [type, setType] = useState<"scale" | "warp" | "resize">("resize");
-  const [origin, setOrigin] = useState([0, 0]);
+
   const [offset, setOffset] = useState<Point>([0, 0]);
-  const [activeHandle, setActiveHandle] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -207,22 +206,8 @@ export default function Page() {
             }}
             type="button"
           >
-            toggle {type}
+            MODE: {type}
           </button>
-
-          <input
-            onChange={(e): void => {
-              setOrigin((o) => [o[1], parseFloat(e.target.value)]);
-            }}
-            value={origin[0]}
-          />
-
-          <input
-            onChange={(e): void => {
-              setOrigin((o) => [o[0], parseFloat(e.target.value)]);
-            }}
-            value={origin[0]}
-          />
 
           <input
             checked={showWarp}
@@ -232,22 +217,6 @@ export default function Page() {
             type="checkbox"
           />
         </div>
-        {/* 
-      <img
-        alt=""
-        src={
-          "https://images.unsplash.com/photo-1694231664712-91e992b4d4a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
-        }
-        style={{
-          position: "absolute",
-          left: element.x,
-          top: element.y,
-          width: element.width,
-          height: element.height,
-          transform: matrix3d,
-          transformOrigin:"0 0"
-        }}
-      /> */}
 
         <div
           style={{
@@ -307,7 +276,7 @@ export default function Page() {
         >
           <Anchor position={[0.5, 0]}>I'm nice anchor</Anchor>
 
-          <Grid lines={0} stroke="#3b82f6" />
+          <Grid lines={4} stroke="#3b82f6" />
           <Handle
             className="resize-handle"
             origin={[0, 0]}
